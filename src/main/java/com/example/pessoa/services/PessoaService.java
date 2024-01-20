@@ -17,4 +17,8 @@ public class PessoaService {
 	public List<Pessoa> findAll() {
 		return repository.findAll();
 	}
+	
+	public Pessoa findById(Long id) {
+		return repository.findById(id).orElse(null);
+	}
 } 
