@@ -1,18 +1,14 @@
 package com.example.pessoa.resources;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.pessoa.entities.Pessoa;
 import com.example.pessoa.services.PessoaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -41,7 +37,11 @@ public class PessoaResource {
 	@PostMapping
 	public ResponseEntity<Pessoa> insert(@RequestBody Pessoa obj) {
 		obj = service.insert(obj);
-		return ResponseEntity.ok().body(obj);
+		// Caso seja da forma abaixo, irá retornar a resposta "201 CREATED"
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
+		// Caso seja feita da forma abaixo, irá retornar a resposta "200 OK"
+		// return ResponseEntity.ok().body(obj);
 	}
-	
+
 }
