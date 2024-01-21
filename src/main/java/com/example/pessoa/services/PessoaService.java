@@ -21,4 +21,8 @@ public class PessoaService {
 	public Pessoa findById(Long id) {
 		return repository.findById(id).orElse(null);
 	}
+	
+	public Pessoa insert(Pessoa obj) {
+		return repository.save(obj);
+	}
 } 
