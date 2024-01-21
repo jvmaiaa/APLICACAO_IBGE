@@ -49,4 +49,9 @@ public class PessoaResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa obj){
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
+	}
 }

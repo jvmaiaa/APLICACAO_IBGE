@@ -29,4 +29,18 @@ public class PessoaService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+
+	public Pessoa update(Long id, Pessoa obj){
+		Pessoa entity = repository.getReferenceById(id);
+		// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	// Colocar nesse metodo, apenas os campos que poderão ser atualizados
+	private void updateData(Pessoa entity, Pessoa obj) {
+		entity.setName(obj.getName());
+		entity.setAge(obj.getAge());
+		entity.setEmail(obj.getEmail());
+	}
 } 
