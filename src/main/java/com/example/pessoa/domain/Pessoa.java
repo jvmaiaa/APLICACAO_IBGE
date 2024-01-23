@@ -3,11 +3,8 @@ package com.example.pessoa.domain;
 import java.io.Serial;
 import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_pessoa")
@@ -21,16 +18,22 @@ public class Pessoa implements Serializable{
 	private String name;
 	private Integer age;
 	private String email;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "endereco_id")
+	private Address endereco;
 	
 	public Pessoa() {
 	}
 
-	public Pessoa(Long id, String name, Integer age, String email) {
+	public Pessoa(Long id, String name, Integer age, String email, Address endereco) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.age = age;
 		this.email = email;
+		this.endereco = endereco;
 	}
 
 	public Long getId() {
@@ -63,6 +66,14 @@ public class Pessoa implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Address getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Address endereco) {
+		this.endereco = endereco;
 	}
 
 	@Override

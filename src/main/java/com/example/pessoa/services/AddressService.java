@@ -25,7 +25,7 @@ public class AddressService {
 
     public Address update(Long id, RequestAddressDTO dto) {
         Address enderecoAtual = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não" +
-                "encontrado com ID: " + id));
+                " encontrado com ID: " + id));
 
         updateData(enderecoAtual, dto);
 
