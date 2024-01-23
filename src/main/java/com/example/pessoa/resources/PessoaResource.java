@@ -1,6 +1,6 @@
 package com.example.pessoa.resources;
 
-import com.example.pessoa.entities.Pessoa;
+import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.services.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class PessoaResource {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Pessoa> insert(@RequestBody Pessoa obj) {
 		obj = service.insert(obj);
@@ -43,15 +43,16 @@ public class PessoaResource {
 		// Caso seja feita da forma abaixo, irá retornar a resposta "200 OK"
 		// return ResponseEntity.ok().body(obj);
 	}
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-		service.delete(id);
-		return ResponseEntity.noContent().build();
-	}
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa obj){
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
