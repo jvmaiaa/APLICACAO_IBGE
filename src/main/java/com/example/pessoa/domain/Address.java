@@ -21,6 +21,7 @@ import java.util.List;
 public class Address implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +32,9 @@ public class Address implements Serializable {
     private String estado;
 
 
+    @Getter
     @JsonIgnore
-    @OneToMany(mappedBy = "endereco")
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.PERSIST)
     private List<Pessoa> pessoas = new ArrayList<>();
 
     public Address (RequestAddressDTO requestAddressDTO){
@@ -43,55 +45,4 @@ public class Address implements Serializable {
         this.estado = requestAddressDTO.estado();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNomeDaRua() {
-        return nomeDaRua;
-    }
-
-    public void setNomeDaRua(String nomeDaRua) {
-        this.nomeDaRua = nomeDaRua;
-    }
-
-    public Integer getNumeroDaCasa() {
-        return numeroDaCasa;
-    }
-
-    public void setNumeroDaCasa(Integer numeroDaCasa) {
-        this.numeroDaCasa = numeroDaCasa;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public List<Pessoa> getPessoas() {
-        return pessoas;
-    }
 }

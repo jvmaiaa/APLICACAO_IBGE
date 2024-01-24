@@ -19,8 +19,8 @@ public class Pessoa implements Serializable{
 	private Integer age;
 	private String email;
 
-	@JsonIgnore
-	@ManyToOne
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "endereco_id")
 	private Address endereco;
 	
