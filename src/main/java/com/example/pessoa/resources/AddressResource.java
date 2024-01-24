@@ -47,9 +47,11 @@ public class AddressResource {
     @PostMapping
     public ResponseEntity<Address> insertAddress(@RequestBody RequestAddressDTO obj) {
         Address newAddress = new Address(obj);
+        repository.save(newAddress);
+
         Long idPessoa = obj.id();
         Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-        newAddress.getPessoas().add(pessoa);
+
         pessoa.setEndereco(newAddress);
         pessoaRepository.save(pessoa);
 
