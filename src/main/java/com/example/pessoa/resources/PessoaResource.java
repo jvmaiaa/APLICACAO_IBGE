@@ -50,6 +50,11 @@ public class PessoaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PutMapping("/{idPessoa}/{idEndereco}")
+	public Pessoa atualizaPessoa(@PathVariable Long idPessoa, @PathVariable Long idEndereco) {
+		return service.atualizaPessoaEndereco(idPessoa, idEndereco);
+	}
+
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);

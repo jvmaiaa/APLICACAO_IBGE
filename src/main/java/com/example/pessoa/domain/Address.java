@@ -33,7 +33,6 @@ public class Address implements Serializable {
 
 
     @Getter
-    @JsonIgnore
     @OneToMany(mappedBy = "endereco", cascade = CascadeType.PERSIST)
     private List<Pessoa> pessoas = new ArrayList<>();
 

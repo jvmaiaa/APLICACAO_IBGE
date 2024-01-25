@@ -1,5 +1,7 @@
 package com.example.pessoa.services;
 
+import com.example.pessoa.DTOs.AddressResponseDTO;
+import com.example.pessoa.DTOs.PessoaResponseDTO;
 import com.example.pessoa.DTOs.RequestAddressDTO;
 import com.example.pessoa.domain.Address;
 import com.example.pessoa.domain.Pessoa;
@@ -10,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +24,32 @@ public class AddressService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public List<Address> findAll(){
-        return repository.findAll();
+    public List<AddressResponseDTO> findAll(){
+        List<Address> address = repository.findAll();
+        List<AddressResponseDTO> newAddress = new ArrayList<>();
+        List<PessoaResponseDTO> pessoasDTO = new ArrayList<>();
+        for (Address endereco : address) {
+            AddressResponseDTO addressDTO = new AddressResponseDTO();
+            addressDTO.setNomeDaRua(endereco.getNomeDaRua());
+            addressDTO.setNumeroDaCasa(endereco.getNumeroDaCasa());
+            addressDTO.setBairro(endereco.getBairro());
+            addressDTO.setCidade(endereco.getCidade());
+            addressDTO.setEstado(endereco.getEstado());
+
+
+            for (Pessoa pessoa : endereco.getPessoas()) {
+                PessoaResponseDTO pessoaDTO = new PessoaResponseDTO();
+                pessoaDTO.setName(pessoa.getName());
+                pessoaDTO.setAge(pessoa.getAge());
+                pessoaDTO.setEmail(pessoa.getEmail());
+
+                pessoasDTO.add(pessoaDTO);
+            }
+            addressDTO.setPessoas(pessoasDTO);
+            newAddress.add(addressDTO);
+        }
+
+        return newAddress;
     }
 
     public Address findById(Long id){
