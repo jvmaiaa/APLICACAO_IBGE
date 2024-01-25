@@ -37,10 +37,10 @@ public class PessoaResource {
 	@PostMapping
 	public ResponseEntity<Pessoa> insert(@RequestBody Pessoa obj) {
 		obj = service.insert(obj);
-		// Caso seja da forma abaixo, irá retornar a resposta "201 CREATED"
+		// Retorna "201 CREATED" com a url do objeto criado
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
-		// Caso seja feita da forma abaixo, irá retornar a resposta "200 OK"
+		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
 	}
 

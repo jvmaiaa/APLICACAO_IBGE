@@ -7,6 +7,7 @@ import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
 import com.example.pessoa.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,21 +47,13 @@ public class AddressResource {
 
     @PostMapping
     public ResponseEntity<Address> insertAddress(@RequestBody RequestAddressDTO obj) {
-        Address newAddress = new Address(obj);
-        repository.save(newAddress);
-
-        Long idPessoa = obj.id();
-        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
-        pessoa.setEndereco(newAddress);
-        pessoaRepository.save(pessoa);
-
-        repository.save(newAddress);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path("/{id}").
-                buildAndExpand(newAddress.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(newAddress);
+        try {
+            Address newAddress = service.insert(obj);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newAddress.getId()).toUri();
+            return ResponseEntity.created(uri).body(newAddress);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/{id}")

@@ -2,7 +2,10 @@ package com.example.pessoa.services;
 
 import com.example.pessoa.DTOs.RequestAddressDTO;
 import com.example.pessoa.domain.Address;
+import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.repositories.AddressRepository;
+import com.example.pessoa.repositories.PessoaRepository;
+import com.example.pessoa.resources.AddressResource;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +18,28 @@ public class AddressService {
     @Autowired
     private AddressRepository repository;
 
+    @Autowired
+    private PessoaRepository pessoaRepository;
+
     public List<Address> findAll(){
         return repository.findAll();
     }
 
     public Address findById(Long id){
         return repository.findById(id).orElse(null);
+    }
+
+    public Address insert(RequestAddressDTO obj) {
+        Address newAddress = new Address(obj);
+        repository.save(newAddress);
+
+        Long idPessoa = obj.idPessoa();
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        pessoa.setEndereco(newAddress);
+        pessoaRepository.save(pessoa);
+
+        return repository.save(newAddress);
     }
 
     public Address update(Long id, RequestAddressDTO dto) {
