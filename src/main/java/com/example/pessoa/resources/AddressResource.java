@@ -1,8 +1,8 @@
 package com.example.pessoa.resources;
 
+import com.example.pessoa.DTOs.AddressResponseDTO;
 import com.example.pessoa.DTOs.RequestAddressDTO;
 import com.example.pessoa.domain.Address;
-import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
 import com.example.pessoa.services.AddressService;
@@ -10,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +28,9 @@ public class AddressResource {
     private AddressService service;
 
     @GetMapping
-    public ResponseEntity<List<Address>> getAllAddres(){
-        var allAddress = repository.findAll();
-        return ResponseEntity.ok(allAddress);
+    public ResponseEntity<List<AddressResponseDTO>> getAllAddres(){
+        List<AddressResponseDTO> list = service.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
@@ -46,13 +45,13 @@ public class AddressResource {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Address> insertAddress(@RequestBody RequestAddressDTO obj) {
         try {
-            Address newAddress = service.insert(obj);
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newAddress.getId()).toUri();
-            return ResponseEntity.created(uri).body(newAddress);
+            Address endereco = service.insert(obj);
+            return ResponseEntity.ok().body(endereco);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mensagem de erro personalizada", e);
         }
     }
 

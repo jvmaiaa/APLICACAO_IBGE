@@ -7,19 +7,20 @@ import com.example.pessoa.domain.Address;
 import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
-import com.example.pessoa.resources.AddressResource;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddressService {
     @Autowired
     private AddressRepository repository;
+
+    private ModelMapper modelMapper;
 
     @Autowired
     private PessoaRepository pessoaRepository;

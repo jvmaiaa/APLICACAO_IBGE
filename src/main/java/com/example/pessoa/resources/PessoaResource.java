@@ -50,6 +50,7 @@ public class PessoaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	// atualizar o enreço de pessoa, apenas passando o ID do enreço na url
 	@PutMapping("/{idPessoa}/{idEndereco}")
 	public Pessoa atualizaPessoa(@PathVariable Long idPessoa, @PathVariable Long idEndereco) {
 		return service.atualizaPessoaEndereco(idPessoa, idEndereco);
