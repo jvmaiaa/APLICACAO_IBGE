@@ -34,11 +34,11 @@ public class AddressResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Optional<Address>> findById(@PathVariable Long id){
+    public ResponseEntity<Address> findById(@PathVariable Long id){
         // Usamos o tipo OPTIONAL quando temos algum objeto que pode NÃO VIR
-        Optional<Address> obj = repository.findById(id);
-        if (obj.isPresent()) {
-            return ResponseEntity.ok().body(obj);
+        Address address = service.findById(id);
+        if (address != null) {
+            return ResponseEntity.ok().body(address);
         } else {
             return ResponseEntity.notFound().build();
         }
