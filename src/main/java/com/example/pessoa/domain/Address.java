@@ -14,24 +14,39 @@ import java.util.List;
 @Entity
 @Table(name = "tb_address")
 @EqualsAndHashCode(of = "id")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Getter
+    @Setter
     private String nomeDaRua;
+
+    @Getter
+    @Setter
     private Integer numeroDaCasa;
+
+    @Getter
+    @Setter
     private String bairro;
+
+    @Getter
+    @Setter
     private String cidade;
+
+    @Getter
+    @Setter
     private String estado;
 
-
+    
     @Getter
     @OneToMany(mappedBy = "endereco", cascade = CascadeType.PERSIST)
     private List<Pessoa> pessoas = new ArrayList<>();

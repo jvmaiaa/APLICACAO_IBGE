@@ -3,27 +3,36 @@ package com.example.pessoa.domain;
 import java.io.Serial;
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "tb_pessoa")
 public class Pessoa implements Serializable{
 	@Serial
 	private static final long serialVersionUID = 1L;
-	
+
+	@Getter
+	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Getter
+	@Setter
 	private String name;
+
+	@Getter
+	@Setter
 	private Integer age;
+
+	@Getter
+	@Setter
 	private String email;
 
-
+	@Getter
+	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "endereco_id")
 	private Address endereco;
