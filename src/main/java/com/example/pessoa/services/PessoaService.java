@@ -1,17 +1,15 @@
 package com.example.pessoa.services;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.example.pessoa.domain.Address;
-import com.example.pessoa.repositories.AddressRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.pessoa.domain.Pessoa;
+import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.parser.Entity;
+import java.util.List;
 
 @Service
 public class PessoaService {
@@ -27,7 +25,10 @@ public class PessoaService {
 	}
 	
 	public Pessoa findById(Long id) {
-		return repository.findById(id).orElse(null);
+		return repository.findById(id)
+				.orElseThrow( () ->
+						new ResponseStatusException(HttpStatus.NOT_FOUND,
+								"Pessoa não encontrada"));
 	}
 	
 	public Pessoa insert(Pessoa obj) {
@@ -60,4 +61,6 @@ public class PessoaService {
 		repository.save(pessoa);
 		return pessoa;
 	}
+
+
 } 

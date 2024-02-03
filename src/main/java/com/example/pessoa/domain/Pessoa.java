@@ -73,6 +73,5 @@ public class Pessoa implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }

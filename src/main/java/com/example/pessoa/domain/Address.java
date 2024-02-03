@@ -46,7 +46,7 @@ public class Address implements Serializable {
     @Setter
     private String estado;
 
-    
+
     @Getter
     @OneToMany(mappedBy = "endereco", cascade = CascadeType.PERSIST)
     private List<Pessoa> pessoas = new ArrayList<>();

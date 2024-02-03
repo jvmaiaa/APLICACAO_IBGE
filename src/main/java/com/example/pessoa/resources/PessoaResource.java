@@ -3,8 +3,10 @@ package com.example.pessoa.resources;
 import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.services.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -25,13 +27,12 @@ public class PessoaResource {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Pessoa> findById(@PathVariable Long id){
-		Pessoa pessoa = service.findById(id);
-		if (pessoa != null) {
-			// return ResponseEntity.ok(pessoa);
-			return ResponseEntity.ok().body(pessoa);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		try {
+			Pessoa pessoa = service.findById(id);
+			return ResponseEntity.ok(pessoa);
+		} catch (ResponseStatusException e){
+			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
 	}
 
 	@PostMapping
