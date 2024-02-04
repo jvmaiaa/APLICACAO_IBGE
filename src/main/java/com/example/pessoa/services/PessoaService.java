@@ -4,11 +4,13 @@ import com.example.pessoa.domain.Address;
 import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
+import org.hibernate.collection.spi.PersistentSortedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,6 +34,7 @@ public class PessoaService {
 	}
 	
 	public Pessoa insert(Pessoa obj) {
+		verificarEmailNoBanco(obj);
 		return repository.save(obj);
 	}
 
@@ -42,6 +45,7 @@ public class PessoaService {
 	public Pessoa update(Long id, Pessoa obj){
 		Pessoa entity = repository.getReferenceById(id);
 		// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco
+		verificarEmailNoBanco(obj);
 		updateData(entity, obj);
 		return repository.save(entity);
 	}
@@ -62,5 +66,18 @@ public class PessoaService {
 		return pessoa;
 	}
 
+	public void verificarEmailNoBanco(Pessoa pessoa){
+		try {
+			List<Pessoa> pessoaNoBanco = repository.findAll();
+
+			for (Pessoa persons : pessoaNoBanco) {
+				if (persons.getEmail().equals(pessoa.getEmail())) {
+					throw new RuntimeException("E-mail já existente!");
+				}
+			}
+		} catch (RuntimeException e){
+			throw new RuntimeException("Erro ao cadastrar e-mail");
+		}
+	}
 
 } 

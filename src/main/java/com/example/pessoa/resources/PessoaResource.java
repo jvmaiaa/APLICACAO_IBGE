@@ -27,12 +27,8 @@ public class PessoaResource {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Pessoa> findById(@PathVariable Long id){
-		try {
 			Pessoa pessoa = service.findById(id);
 			return ResponseEntity.ok(pessoa);
-		} catch (ResponseStatusException e){
-			return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
 	}
 
 	@PostMapping
