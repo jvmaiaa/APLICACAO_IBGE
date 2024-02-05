@@ -61,6 +61,12 @@ public class PessoaService {
 		Pessoa pessoa = repository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Id de pessoa não encontrado!"));
 		Address endereco = addressRepository.findById(idEndereco).orElseThrow(() -> new RuntimeException("Id de endereço não encontrado!"));
 
+		for(Pessoa pessoas : endereco.getPessoas()) {
+			if (pessoas.getEmail().equals(pessoa.getEmail())){
+				throw new RuntimeException("Email já existe naquele endereço!");
+			}
+		}
+
 		pessoa.setEndereco(endereco);
 		repository.save(pessoa);
 		return pessoa;

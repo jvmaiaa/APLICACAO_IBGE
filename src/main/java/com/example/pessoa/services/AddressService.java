@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class AddressService {
     @Autowired
-    private AddressRepository repository;
+    private AddressRepository addressRepository;
 
     private ModelMapper modelMapper;
 
@@ -26,11 +26,12 @@ public class AddressService {
     private PessoaRepository pessoaRepository;
 
     public List<AddressResponseDTO> findAll(){
-        List<Address> address = repository.findAll();
+        List<Address> address = addressRepository.findAll();
         List<AddressResponseDTO> newAddress = new ArrayList<>();
         List<PessoaResponseDTO> pessoasDTO = new ArrayList<>();
         for (Address endereco : address) {
             AddressResponseDTO addressDTO = new AddressResponseDTO();
+            addressDTO.setId(endereco.getId());
             addressDTO.setNomeDaRua(endereco.getNomeDaRua());
             addressDTO.setNumeroDaCasa(endereco.getNumeroDaCasa());
             addressDTO.setBairro(endereco.getBairro());
@@ -54,12 +55,12 @@ public class AddressService {
     }
 
     public Address findById(Long id){
-        return repository.findById(id).orElse(null);
+        return addressRepository.findById(id).orElse(null);
     }
 
     public Address insert(RequestAddressDTO obj) {
         Address newAddress = new Address(obj);
-        repository.save(newAddress);
+        addressRepository.save(newAddress);
 
         Long idPessoa = obj.idPessoa();
         Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
@@ -67,16 +68,16 @@ public class AddressService {
         pessoa.setEndereco(newAddress);
         pessoaRepository.save(pessoa);
 
-        return repository.save(newAddress);
+        return addressRepository.save(newAddress);
     }
 
     public Address update(Long id, RequestAddressDTO dto) {
-        Address enderecoAtual = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não" +
+        Address enderecoAtual = addressRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não" +
                 " encontrado com ID: " + id));
 
         updateData(enderecoAtual, dto);
 
-        return repository.save(enderecoAtual);
+        return addressRepository.save(enderecoAtual);
     }
 
     private void updateData(Address entity, RequestAddressDTO dto) {
@@ -98,7 +99,7 @@ public class AddressService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        addressRepository.deleteById(id);
     }
 
 }

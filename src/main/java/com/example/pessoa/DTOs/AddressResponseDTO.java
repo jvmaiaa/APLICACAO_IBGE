@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AddressResponseDTO {
-
+    private Long id;
     private String nomeDaRua;
     private Integer numeroDaCasa;
     private String bairro;
