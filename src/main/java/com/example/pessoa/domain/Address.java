@@ -1,8 +1,8 @@
 package com.example.pessoa.domain;
 
 // Para permitir todas as importações de uma dependencia, é usado "*" no import
+
 import com.example.pessoa.DTOs.RequestAddressDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -3,11 +3,8 @@ package com.example.pessoa.resources;
 import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.services.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
