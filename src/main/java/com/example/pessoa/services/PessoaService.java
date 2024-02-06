@@ -4,13 +4,11 @@ import com.example.pessoa.domain.Address;
 import com.example.pessoa.domain.Pessoa;
 import com.example.pessoa.repositories.AddressRepository;
 import com.example.pessoa.repositories.PessoaRepository;
-import org.hibernate.collection.spi.PersistentSortedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,8 +32,14 @@ public class PessoaService {
 	}
 	
 	public Pessoa insert(Pessoa obj) {
-		verificarEmailNoBanco(obj);
-		return repository.save(obj);
+		try {
+			if (repository.existsByEmail(obj.getEmail())) {
+				throw new RuntimeException("O email já está cadastrado!");
+			}
+			return repository.save(obj);
+		} catch (RuntimeException e){
+			throw new RuntimeException("Erro ao cadastrar usuário!");
+		}
 	}
 
 	public Pessoa update(Long id, Pessoa obj){
@@ -86,4 +90,4 @@ public class PessoaService {
 		}
 	}
 
-} 
+}
