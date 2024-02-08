@@ -1,8 +1,7 @@
 package com.example.pessoa.api.service;
 
-import com.example.pessoa.api.dto.response.AddressResponse;
-import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.dto.request.AddressRequest;
+import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.repository.AddressRepository;
@@ -12,63 +11,47 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.pessoa.api.mapper.AddressMapper.toAddressEntity;
 
 @Service
 public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private PessoaRepository pessoaRepository;
 
     public List<AddressResponse> findAll(){
-        List<Address> address = addressRepository.findAll();
-        List<AddressResponse> newAddress = new ArrayList<>();
-        List<PessoaResponse> pessoasDTO = new ArrayList<>();
-        for (Address endereco : address) {
-            AddressResponse addressDTO = new AddressResponse();
-            addressDTO.setId(endereco.getId());
-            addressDTO.setNomeDaRua(endereco.getNomeDaRua());
-            addressDTO.setNumeroDaCasa(endereco.getNumeroDaCasa());
-            addressDTO.setBairro(endereco.getBairro());
-            addressDTO.setCidade(endereco.getCidade());
-            addressDTO.setEstado(endereco.getEstado());
+        return addressRepository.findAll()
+                .stream()
+                .map(endereco -> modelMapper.map(endereco, AddressResponse.class)).collect(Collectors.toList());
+    }
 
-
-            for (Pessoa pessoa : endereco.getPessoas()) {
-                PessoaResponse pessoaDTO = new PessoaResponse();
-                pessoaDTO.setName(pessoa.getName());
-                pessoaDTO.setAge(pessoa.getAge());
-                pessoaDTO.setEmail(pessoa.getEmail());
-
-                pessoasDTO.add(pessoaDTO);
-            }
-            addressDTO.setPessoas(pessoasDTO);
-            newAddress.add(addressDTO);
+    public AddressResponse findById(Long id){
+        try {
+            Address enderecoEntity = addressRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+            return modelMapper.map(enderecoEntity, AddressResponse.class);
+        } catch (RuntimeException e){
+            throw new RuntimeException("Endereço não encontrado");
         }
-
-        return newAddress;
     }
 
-    public Address findById(Long id){
-        return addressRepository.findById(id).orElse(null);
-    }
+    public AddressResponse insert(AddressRequest obj) {
 
-    public Address insert(AddressRequest obj) {
-        Address newAddress = new Address(obj);
-        addressRepository.save(newAddress);
+        Pessoa pessoa = pessoaRepository.findById(obj.getIdPessoa()).
+                orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        Long idPessoa = obj.getIdPessoa();
-        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
-        pessoa.setEndereco(newAddress);
-        pessoaRepository.save(pessoa);
-
-        return addressRepository.save(newAddress);
+        Address endereco = toAddressEntity(obj);
+        pessoa.setEndereco(endereco);
+       // endereco.getPessoas().add(pessoa);
+        addressRepository.save(endereco);
+        return modelMapper.map(endereco, AddressResponse.class);
     }
 
     public Address update(Long id, AddressRequest dto) {

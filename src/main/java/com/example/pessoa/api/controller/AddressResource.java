@@ -1,18 +1,18 @@
 package com.example.pessoa.api.controller;
 
-import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.dto.request.AddressRequest;
-import com.example.pessoa.api.entity.Address;
+import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import com.example.pessoa.api.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(value = "/api/v2")
@@ -27,32 +27,25 @@ public class AddressResource {
     private AddressService service;
 
     @GetMapping
-    public ResponseEntity<List<AddressResponse>> getAllAddres(){
+    @ResponseStatus(OK)
+    public List<AddressResponse> getAllAddres(){
         List<AddressResponse> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return list;
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Address> findById(@PathVariable Long id){
+    @ResponseStatus(OK)
+    public AddressResponse findById(@PathVariable Long id){
         // Usamos o tipo OPTIONAL quando temos algum objeto que pode NÃO VIR
-        Address address = service.findById(id);
-        if (address != null) {
-            return ResponseEntity.ok().body(address);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return service.findById(id);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Address> insertAddress(@RequestBody AddressRequest obj) {
-        try {
-            Address endereco = service.insert(obj);
-            return ResponseEntity.ok().body(endereco);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mensagem de erro personalizada", e);
-        }
+    @ResponseStatus(CREATED)
+    public AddressResponse insertAddress(@RequestBody AddressRequest obj) {
+        return service.insert(obj);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<AddressRequest> updateAddress(@PathVariable Long id, @RequestBody AddressRequest dto) {
