@@ -1,6 +1,6 @@
-package com.example.pessoa.repositories;
+package com.example.pessoa.api.repository;
 
-import com.example.pessoa.domain.Pessoa;
+import com.example.pessoa.api.entity.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,12 +1,12 @@
-package com.example.pessoa.services;
+package com.example.pessoa.api.service;
 
-import com.example.pessoa.DTOs.AddressResponseDTO;
-import com.example.pessoa.DTOs.PessoaResponseDTO;
-import com.example.pessoa.DTOs.RequestAddressDTO;
-import com.example.pessoa.domain.Address;
-import com.example.pessoa.domain.Pessoa;
-import com.example.pessoa.repositories.AddressRepository;
-import com.example.pessoa.repositories.PessoaRepository;
+import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.response.PessoaResponse;
+import com.example.pessoa.api.dto.request.AddressRequest;
+import com.example.pessoa.api.entity.Address;
+import com.example.pessoa.api.entity.Pessoa;
+import com.example.pessoa.api.repository.AddressRepository;
+import com.example.pessoa.api.repository.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class AddressService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public List<AddressResponseDTO> findAll(){
+    public List<AddressResponse> findAll(){
         List<Address> address = addressRepository.findAll();
-        List<AddressResponseDTO> newAddress = new ArrayList<>();
-        List<PessoaResponseDTO> pessoasDTO = new ArrayList<>();
+        List<AddressResponse> newAddress = new ArrayList<>();
+        List<PessoaResponse> pessoasDTO = new ArrayList<>();
         for (Address endereco : address) {
-            AddressResponseDTO addressDTO = new AddressResponseDTO();
+            AddressResponse addressDTO = new AddressResponse();
             addressDTO.setId(endereco.getId());
             addressDTO.setNomeDaRua(endereco.getNomeDaRua());
             addressDTO.setNumeroDaCasa(endereco.getNumeroDaCasa());
@@ -40,7 +40,7 @@ public class AddressService {
 
 
             for (Pessoa pessoa : endereco.getPessoas()) {
-                PessoaResponseDTO pessoaDTO = new PessoaResponseDTO();
+                PessoaResponse pessoaDTO = new PessoaResponse();
                 pessoaDTO.setName(pessoa.getName());
                 pessoaDTO.setAge(pessoa.getAge());
                 pessoaDTO.setEmail(pessoa.getEmail());
@@ -58,11 +58,11 @@ public class AddressService {
         return addressRepository.findById(id).orElse(null);
     }
 
-    public Address insert(RequestAddressDTO obj) {
+    public Address insert(AddressRequest obj) {
         Address newAddress = new Address(obj);
         addressRepository.save(newAddress);
 
-        Long idPessoa = obj.idPessoa();
+        Long idPessoa = obj.getIdPessoa();
         Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
         pessoa.setEndereco(newAddress);
@@ -71,7 +71,7 @@ public class AddressService {
         return addressRepository.save(newAddress);
     }
 
-    public Address update(Long id, RequestAddressDTO dto) {
+    public Address update(Long id, AddressRequest dto) {
         Address enderecoAtual = addressRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não" +
                 " encontrado com ID: " + id));
 
@@ -80,21 +80,21 @@ public class AddressService {
         return addressRepository.save(enderecoAtual);
     }
 
-    private void updateData(Address entity, RequestAddressDTO dto) {
-        if (dto.nomeDaRua() != null){
-            entity.setNomeDaRua(dto.nomeDaRua());
+    private void updateData(Address entity, AddressRequest dto) {
+        if (dto.getNomeDaRua() != null){
+            entity.setNomeDaRua(dto.getNomeDaRua());
         }
-        if (dto.numeroDaCasa() != null){
-            entity.setNumeroDaCasa(dto.numeroDaCasa());
+        if (dto.getNumeroDaCasa() != null){
+            entity.setNumeroDaCasa(dto.getNumeroDaCasa());
         }
-        if (dto.bairro() != null) {
-            entity.setBairro(dto.bairro());
+        if (dto.getBairro() != null) {
+            entity.setBairro(dto.getBairro());
         }
-        if (dto.cidade() != null) {
-            entity.setCidade(dto.cidade());
+        if (dto.getCidade() != null) {
+            entity.setCidade(dto.getCidade());
         }
-        if (dto.estado() != null) {
-            entity.setEstado(dto.estado());
+        if (dto.getEstado() != null) {
+            entity.setEstado(dto.getEstado());
         }
     }
 

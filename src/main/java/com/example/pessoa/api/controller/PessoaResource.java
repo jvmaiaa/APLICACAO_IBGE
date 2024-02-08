@@ -1,7 +1,7 @@
-package com.example.pessoa.resources;
+package com.example.pessoa.api.controller;
 
-import com.example.pessoa.domain.Pessoa;
-import com.example.pessoa.services.PessoaService;
+import com.example.pessoa.api.entity.Pessoa;
+import com.example.pessoa.api.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class PessoaResource {
 	
 	@GetMapping
 	@ResponseStatus(OK)
-	public List<Pessoa>findAll() {
+	public List<Pessoa> findAll() {
 		List<Pessoa> list = service.findAll();
 		return list;
 	}

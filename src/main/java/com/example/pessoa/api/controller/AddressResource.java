@@ -1,11 +1,11 @@
-package com.example.pessoa.resources;
+package com.example.pessoa.api.controller;
 
-import com.example.pessoa.DTOs.AddressResponseDTO;
-import com.example.pessoa.DTOs.RequestAddressDTO;
-import com.example.pessoa.domain.Address;
-import com.example.pessoa.repositories.AddressRepository;
-import com.example.pessoa.repositories.PessoaRepository;
-import com.example.pessoa.services.AddressService;
+import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.request.AddressRequest;
+import com.example.pessoa.api.entity.Address;
+import com.example.pessoa.api.repository.AddressRepository;
+import com.example.pessoa.api.repository.PessoaRepository;
+import com.example.pessoa.api.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +27,8 @@ public class AddressResource {
     private AddressService service;
 
     @GetMapping
-    public ResponseEntity<List<AddressResponseDTO>> getAllAddres(){
-        List<AddressResponseDTO> list = service.findAll();
+    public ResponseEntity<List<AddressResponse>> getAllAddres(){
+        List<AddressResponse> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -45,7 +45,7 @@ public class AddressResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Address> insertAddress(@RequestBody RequestAddressDTO obj) {
+    public ResponseEntity<Address> insertAddress(@RequestBody AddressRequest obj) {
         try {
             Address endereco = service.insert(obj);
             return ResponseEntity.ok().body(endereco);
@@ -55,7 +55,7 @@ public class AddressResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RequestAddressDTO> updateAddress(@PathVariable Long id, @RequestBody RequestAddressDTO dto) {
+    public ResponseEntity<AddressRequest> updateAddress(@PathVariable Long id, @RequestBody AddressRequest dto) {
         service.update(id, dto);
         return ResponseEntity.ok().body(dto);
     }

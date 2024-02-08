@@ -1,19 +1,21 @@
-package com.example.pessoa.DTOs;
+package com.example.pessoa.api.dto.request;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
-public class AddressResponseDTO {
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class AddressRequest {
+
     private String nomeDaRua;
     private Integer numeroDaCasa;
     private String bairro;
     private String cidade;
     private String estado;
-
-    private List<PessoaResponseDTO> pessoas;
+    private Long idPessoa;
 }

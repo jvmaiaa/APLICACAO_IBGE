@@ -1,9 +1,9 @@
-package com.example.pessoa.services;
+package com.example.pessoa.api.service;
 
-import com.example.pessoa.domain.Address;
-import com.example.pessoa.domain.Pessoa;
-import com.example.pessoa.repositories.AddressRepository;
-import com.example.pessoa.repositories.PessoaRepository;
+import com.example.pessoa.api.entity.Address;
+import com.example.pessoa.api.entity.Pessoa;
+import com.example.pessoa.api.repository.AddressRepository;
+import com.example.pessoa.api.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -1,53 +1,33 @@
-package com.example.pessoa.domain;
+package com.example.pessoa.api.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @Table(name = "tb_pessoa")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pessoa implements Serializable{
 	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@Getter
-	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Getter
-	@Setter
 	private String name;
 
-	@Getter
-	@Setter
 	private Integer age;
 
-	@Getter
-	@Setter
 	private String email;
 
-	@Getter
-	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "endereco_id")
 	private Address endereco;
-	
-	public Pessoa() {
-	}
 
-	public Pessoa(Long id, String name, Integer age, String email, Address endereco) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.age = age;
-		this.email = email;
-		this.endereco = endereco;
-	}
 
 	@Override
 	public int hashCode() {
