@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping(value = "/api/v2")
@@ -48,9 +47,9 @@ public class AddressResource {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressRequest> updateAddress(@PathVariable Long id, @RequestBody AddressRequest dto) {
-        service.update(id, dto);
-        return ResponseEntity.ok().body(dto);
+    @ResponseStatus(OK)
+    public AddressResponse updateAddress(@PathVariable Long id, @RequestBody AddressRequest dto) {
+       return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")

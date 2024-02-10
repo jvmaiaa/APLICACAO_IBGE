@@ -26,4 +26,12 @@ public class AddressMapper {
         response.setEstado(address.getEstado());
         return response;
     }
+
+    public static void atualizaAddress(Address entity, AddressRequest request) {
+        entity.setNomeDaRua(request.getNomeDaRua());
+        entity.setNumeroDaCasa(request.getNumeroDaCasa());
+        entity.setBairro(request.getBairro());
+        entity.setCidade(request.getCidade());
+        entity.setEstado(request.getEstado());
+    }
 }
