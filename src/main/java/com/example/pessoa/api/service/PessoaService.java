@@ -1,5 +1,6 @@
 package com.example.pessoa.api.service;
 
+import com.example.pessoa.api.dto.request.PessoaRequest;
 import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
@@ -41,12 +42,15 @@ public class PessoaService {
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 	
-	public Pessoa insert(Pessoa obj) {
+	public PessoaResponse insert(PessoaRequest obj) {
 		try {
-			if (repository.existsByEmail(obj.getEmail())) {
+			Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
+			if (repository.existsByEmail(pessoaEntity.getEmail())) {
 				throw new RuntimeException("O email já está cadastrado!");
 			}
-			return repository.save(obj);
+			repository.save(pessoaEntity);
+			return modelMapper.map(pessoaEntity, PessoaResponse.class);
+
 		} catch (RuntimeException e){
 			throw new RuntimeException("Erro ao cadastrar usuário!");
 		}

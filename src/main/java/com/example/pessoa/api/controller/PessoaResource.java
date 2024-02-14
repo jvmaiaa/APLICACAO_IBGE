@@ -1,5 +1,6 @@
 package com.example.pessoa.api.controller;
 
+import com.example.pessoa.api.dto.request.PessoaRequest;
 import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.service.PessoaService;
@@ -31,10 +32,9 @@ public class PessoaResource {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public Pessoa insert(@RequestBody Pessoa obj) {
-		obj = service.insert(obj);
+	public PessoaResponse insert(@RequestBody PessoaRequest obj) {
 		// Retorna "201 CREATED" com a url do objeto criado
-		return obj;
+		return service.insert(obj);
 		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
 	}
