@@ -1,5 +1,6 @@
 package com.example.pessoa.api.controller;
 
+import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,14 @@ public class PessoaResource {
 	
 	@GetMapping
 	@ResponseStatus(OK)
-	public List<Pessoa> findAll() {
-		List<Pessoa> list = service.findAll();
-		return list;
+	public List<PessoaResponse> findAll() {
+		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public Pessoa findById(@PathVariable Long id){
-			Pessoa pessoa = service.findById(id);
-			return pessoa;
+	public PessoaResponse findById(@PathVariable Long id){
+		return service.findById(id);
 	}
 
 	@PostMapping

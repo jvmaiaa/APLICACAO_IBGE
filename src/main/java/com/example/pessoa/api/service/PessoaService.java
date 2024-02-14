@@ -1,15 +1,18 @@
 package com.example.pessoa.api.service;
 
+import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
@@ -19,16 +22,23 @@ public class PessoaService {
 
 	@Autowired
 	private AddressRepository addressRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
 	
-	public List<Pessoa> findAll() {
-		return repository.findAll();
+	public List<PessoaResponse> findAll() {
+		return repository.findAll()
+				.stream()
+				.map(pessoa -> modelMapper.map(pessoa, PessoaResponse.class)).collect(Collectors.toList());
 	}
 	
-	public Pessoa findById(Long id) {
-		return repository.findById(id)
-				.orElseThrow( () ->
-						new ResponseStatusException(HttpStatus.NOT_FOUND,
-								"Pessoa não encontrada"));
+	public PessoaResponse findById(Long id) {
+		Pessoa pessoaEntity = repository.
+				findById(id).
+				orElseThrow(
+						() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+				"Pessoa não encontrada"));
+		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 	
 	public Pessoa insert(Pessoa obj) {
