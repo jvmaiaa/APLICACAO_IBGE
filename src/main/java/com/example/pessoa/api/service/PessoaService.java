@@ -6,6 +6,7 @@ import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,9 +29,17 @@ public class PessoaService {
 	private ModelMapper modelMapper;
 	
 	public List<PessoaResponse> findAll() {
-		return repository.findAll()
-				.stream()
-				.map(pessoa -> modelMapper.map(pessoa, PessoaResponse.class)).collect(Collectors.toList());
+//		try {
+			return repository.findAll()
+					.stream()
+					.map(pessoa -> {
+						PessoaResponse response = modelMapper.map(pessoa, PessoaResponse.class);
+						response.setIdEndereco(pessoa.getEndereco().getId());
+						return response;
+					}).collect(Collectors.toList());
+//		} catch (RuntimeException e){
+//			throw new RuntimeException("Erro ao buscar ID");
+//		}
 	}
 	
 	public PessoaResponse findById(Long id) {
@@ -56,6 +65,7 @@ public class PessoaService {
 		}
 	}
 
+	@Transactional
 	public Pessoa update(Long id, Pessoa obj){
 		Pessoa entity = repository.getReferenceById(id);
 		// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco

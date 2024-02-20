@@ -46,7 +46,7 @@ public class PessoaResource {
 		return obj;
 	}
 
-	// atualizar o enreço de pessoa, apenas passando o ID do endereço na url
+	// atualizar o endereço de pessoa, apenas passando o ID do endereço na url
 	@PutMapping("/{idPessoa}/{idEndereco}")
 	@ResponseStatus(OK)
 	public Pessoa atualizaPessoa(@PathVariable Long idPessoa, @PathVariable Long idEndereco) {
