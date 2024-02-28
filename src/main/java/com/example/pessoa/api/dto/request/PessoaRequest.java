@@ -1,7 +1,6 @@
 package com.example.pessoa.api.dto.request;
 
 
-import com.example.pessoa.api.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +15,5 @@ public class PessoaRequest {
     private String name;
     private Integer age;
     private String email;
-    private Address endereco;
+    private Long idEndereco;
 }
