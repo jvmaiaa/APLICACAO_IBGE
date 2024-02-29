@@ -4,14 +4,13 @@ import com.example.pessoa.api.dto.request.PessoaRequest;
 import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
+import com.example.pessoa.api.exception.PessoaNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,11 +45,11 @@ public class PessoaService {
 		Pessoa pessoaEntity = repository.
 				findById(id).
 				orElseThrow(
-						() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-				"Pessoa não encontrada"));
+						() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
-	
+
+	@Transactional
 	public PessoaResponse insert(PessoaRequest obj) {
 		try {
 			Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
@@ -67,15 +66,22 @@ public class PessoaService {
 
 	@Transactional
 	public Pessoa update(Long id, Pessoa obj){
-		Pessoa entity = repository.getReferenceById(id);
-		// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco
-		verificarEmailNoBanco(obj);
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			Pessoa entity = repository.findById(id).orElseThrow(
+					() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
+			;
+			// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco
+			verificarEmailNoBanco(obj);
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (PessoaNotFoundException e){
+			throw new PessoaNotFoundException("Pessoa com id " + id + " não encontrada");
+		}
 	}
 
 	public void delete(Long id) {
-		repository.deleteById(id);
+		repository.delete(repository.findById(id).orElseThrow(
+				() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada")));
 	}
 
 	// Colocar nesse metodo, apenas os campos que poderão ser atualizados

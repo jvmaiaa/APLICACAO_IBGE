@@ -4,6 +4,7 @@ import com.example.pessoa.api.dto.request.PessoaRequest;
 import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.service.PessoaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class PessoaResource {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public PessoaResponse insert(@RequestBody PessoaRequest obj) {
+	public PessoaResponse insert(@RequestBody @Valid PessoaRequest obj) {
 		// Retorna "201 CREATED" com a url do objeto criado
 		return service.insert(obj);
 		// Retorna "200 OK"
