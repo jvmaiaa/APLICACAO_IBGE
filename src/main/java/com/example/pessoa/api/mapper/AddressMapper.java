@@ -7,6 +7,7 @@ import com.example.pessoa.api.entity.Address;
 public class AddressMapper {
 
     public static Address toAddressEntity(AddressRequest request){
+
         Address address = new Address();
         address.setNomeDaRua(request.getNomeDaRua());
         address.setNumeroDaCasa(request.getNumeroDaCasa());

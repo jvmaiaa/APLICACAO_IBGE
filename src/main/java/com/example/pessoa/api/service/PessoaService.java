@@ -51,7 +51,7 @@ public class PessoaService {
 
 	@Transactional
 	public PessoaResponse insert(PessoaRequest obj) {
-		try {
+//		try {
 			Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
 			if (repository.existsByEmail(pessoaEntity.getEmail())) {
 				throw new RuntimeException("O email já está cadastrado!");
@@ -59,9 +59,9 @@ public class PessoaService {
 			repository.save(pessoaEntity);
 			return modelMapper.map(pessoaEntity, PessoaResponse.class);
 
-		} catch (RuntimeException e){
-			throw new RuntimeException("Erro ao cadastrar usuário!");
-		}
+//		} catch (RuntimeException e){
+//			throw new RuntimeException("Erro ao cadastrar usuário!");
+//		}
 	}
 
 	@Transactional

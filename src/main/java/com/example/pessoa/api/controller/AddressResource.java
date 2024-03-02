@@ -5,6 +5,7 @@ import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import com.example.pessoa.api.service.AddressService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ public class AddressResource {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public AddressResponse insertAddress(@RequestBody AddressRequest obj) {
+    public AddressResponse insertAddress(@RequestBody @Valid AddressRequest obj) {
         return service.insert(obj);
     }
 

@@ -5,13 +5,18 @@ import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.service.PessoaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Validated
 @RestController
 @RequestMapping(value = "/api/v1")
 public class PessoaResource {
@@ -27,14 +32,13 @@ public class PessoaResource {
 	
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public PessoaResponse findById(@PathVariable Long id){
+	public PessoaResponse findById(@PathVariable @NotNull @Positive Long id){
 		return service.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public PessoaResponse insert(@RequestBody @Valid PessoaRequest obj) {
-		// Retorna "201 CREATED" com a url do objeto criado
 		return service.insert(obj);
 		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
@@ -42,21 +46,28 @@ public class PessoaResource {
 
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public Pessoa update(@PathVariable Long id, @RequestBody Pessoa obj){
+	public Pessoa update(@PathVariable @NotNull @Positive Long id,
+						 @RequestBody @Valid Pessoa obj){
 		obj = service.update(id, obj);
 		return obj;
 	}
 
-	// atualizar o endereço de pessoa, apenas passando o ID do endereço na url
-	@PutMapping("/{idPessoa}/{idEndereco}")
+	/**
+	 * Atualiza o endereço associado a uma pessoa identificada pelo ID.
+	 * @param idPessoa - Identificador único da pessoa.
+	 * @param idEndereco - Id do novo endereço.
+	 * @return Retorna a entidade Pessoa atualizada com o novo endereço.
+	 */
+	 @PutMapping("/{idPessoa}/{idEndereco}")
 	@ResponseStatus(OK)
-	public Pessoa atualizaPessoa(@PathVariable Long idPessoa, @PathVariable Long idEndereco) {
+	public Pessoa atualizaPessoa(@PathVariable @NotBlank @Positive Long idPessoa,
+								 @PathVariable @NotBlank @Positive Long idEndereco) {
 		return service.atualizaPessoaEndereco(idPessoa, idEndereco);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(NO_CONTENT)
-	public void delete(@PathVariable Long id) {
+	public void delete(@PathVariable @NotNull @Positive Long id) {
 		service.delete(id);
 	}
 

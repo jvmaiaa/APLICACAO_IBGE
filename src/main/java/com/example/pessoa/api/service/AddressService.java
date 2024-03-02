@@ -3,7 +3,6 @@ package com.example.pessoa.api.service;
 import com.example.pessoa.api.dto.request.AddressRequest;
 import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.entity.Address;
-import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,13 +42,7 @@ public class AddressService {
     }
 
     public AddressResponse insert(AddressRequest obj) {
-
-        Pessoa pessoa = pessoaRepository.findById(obj.getIdPessoa()).
-                orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
         Address endereco = toAddressEntity(obj);
-        pessoa.setEndereco(endereco);
-       // endereco.getPessoas().add(pessoa);
         addressRepository.save(endereco);
         return modelMapper.map(endereco, AddressResponse.class);
     }
