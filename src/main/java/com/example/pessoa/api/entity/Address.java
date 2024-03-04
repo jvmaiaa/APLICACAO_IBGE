@@ -38,7 +38,7 @@ public class Address implements Serializable {
 
     @NotNull
     @Positive
-    @Column(length = 4, nullable = false)
+    @Column(length = 5, nullable = false)
     private Integer numeroDaCasa;
 
     @NotNull
