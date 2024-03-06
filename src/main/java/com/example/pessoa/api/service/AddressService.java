@@ -3,9 +3,9 @@ package com.example.pessoa.api.service;
 import com.example.pessoa.api.dto.request.AddressRequest;
 import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.entity.Address;
+import com.example.pessoa.api.exception.EnderecoNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +33,8 @@ public class AddressService {
     }
 
     public AddressResponse findById(Long id){
-        try {
-            Address enderecoEntity = addressRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+            Address enderecoEntity = addressRepository.findById(id).orElseThrow(() -> new EnderecoNotFoundException("Endereço não encontrado"));
             return modelMapper.map(enderecoEntity, AddressResponse.class);
-        } catch (RuntimeException e){
-            throw new RuntimeException("Endereço não encontrado");
-        }
     }
 
     public AddressResponse insert(AddressRequest obj) {
@@ -48,23 +44,19 @@ public class AddressService {
     }
 
     public AddressResponse update(Long id, AddressRequest dto) {
-        try {
             Address enderecoAtual = addressRepository
                     .findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"));
+                    .orElseThrow( () -> new EnderecoNotFoundException("Endereço com Id: " + id + " não encontrado"));
 
             atualizaAddress(enderecoAtual, dto);
             Address enderecoSalvo = addressRepository.save(enderecoAtual);
 
             return toAddressResponse(enderecoSalvo);
-
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Endereço não encontrado");
-        }
     }
 
     public void delete(Long id) {
-        addressRepository.deleteById(id);
+        addressRepository.delete(addressRepository.findById(id).orElseThrow(
+                () -> new EnderecoNotFoundException("Endereço com Id: " + id + " não encontrado")));
     }
 
 }

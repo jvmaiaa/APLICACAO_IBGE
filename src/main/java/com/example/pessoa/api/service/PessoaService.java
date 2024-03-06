@@ -4,10 +4,10 @@ import com.example.pessoa.api.dto.request.PessoaRequest;
 import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
+import com.example.pessoa.api.exception.EmailCadastradoExeption;
 import com.example.pessoa.api.exception.PessoaNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,43 +28,33 @@ public class PessoaService {
 	private ModelMapper modelMapper;
 	
 	public List<PessoaResponse> findAll() {
-//		try {
-			return repository.findAll()
-					.stream()
-					.map(pessoa -> {
-						PessoaResponse response = modelMapper.map(pessoa, PessoaResponse.class);
-						response.setIdEndereco(pessoa.getEndereco().getId());
-						return response;
-					}).collect(Collectors.toList());
-//		} catch (RuntimeException e){
-//			throw new RuntimeException("Erro ao buscar ID");
-//		}
+		return repository.findAll()
+			.stream()
+			.map(pessoa -> {
+				PessoaResponse response = modelMapper.map(pessoa, PessoaResponse.class);
+				response.setIdEndereco(pessoa.getEndereco().getId());
+				return response;
+			}).collect(Collectors.toList());
 	}
 	
 	public PessoaResponse findById(Long id) {
 		Pessoa pessoaEntity = repository.
-				findById(id).
-				orElseThrow(
-						() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
+			findById(id).
+			orElseThrow(
+				() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 
-	@Transactional
 	public PessoaResponse insert(PessoaRequest obj) {
-//		try {
-			Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
-			if (repository.existsByEmail(pessoaEntity.getEmail())) {
-				throw new RuntimeException("O email já está cadastrado!");
-			}
-			repository.save(pessoaEntity);
-			return modelMapper.map(pessoaEntity, PessoaResponse.class);
+		Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
 
-//		} catch (RuntimeException e){
-//			throw new RuntimeException("Erro ao cadastrar usuário!");
-//		}
+		if (repository.existsByEmail(pessoaEntity.getEmail())) {
+			throw new EmailCadastradoExeption("E-mail já está cadastrado");
+		}
+		repository.save(pessoaEntity);
+		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 
-	@Transactional
 	public Pessoa update(Long id, Pessoa obj){
 		try {
 			Pessoa entity = repository.findById(id).orElseThrow(
