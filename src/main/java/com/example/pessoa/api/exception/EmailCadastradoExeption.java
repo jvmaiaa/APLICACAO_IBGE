@@ -10,4 +10,9 @@ public class EmailCadastradoExeption extends RuntimeException {
     public EmailCadastradoExeption (String message){
         super(message);
     }
+
+    public EmailCadastradoExeption (){
+        super();
+    }
+
 }

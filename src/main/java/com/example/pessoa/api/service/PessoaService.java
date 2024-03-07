@@ -5,9 +5,11 @@ import com.example.pessoa.api.dto.response.PessoaResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Pessoa;
 import com.example.pessoa.api.exception.EmailCadastradoExeption;
+import com.example.pessoa.api.exception.EnderecoNotFoundException;
 import com.example.pessoa.api.exception.PessoaNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
+
+	private static final String EMAIL_CADASTRADO = "E-mail já está cadastrado no sistema";
 
 	@Autowired
 	private PessoaRepository repository;
@@ -41,7 +45,7 @@ public class PessoaService {
 		Pessoa pessoaEntity = repository.
 			findById(id).
 			orElseThrow(
-				() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
+				() -> new PessoaNotFoundException(id));
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 
@@ -49,45 +53,57 @@ public class PessoaService {
 		Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
 
 		if (repository.existsByEmail(pessoaEntity.getEmail())) {
-			throw new EmailCadastradoExeption("E-mail já está cadastrado");
+			throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
 		}
 		repository.save(pessoaEntity);
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
 	}
 
-	public Pessoa update(Long id, Pessoa obj){
-		try {
+	@Transactional
+	public PessoaResponse update(Long id, PessoaRequest dto){
 			Pessoa entity = repository.findById(id).orElseThrow(
-					() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada"));
-			;
-			// Criar metodo "updateDate" para criar a logica de atualização do objeto no banco
-			verificarEmailNoBanco(obj);
-			updateData(entity, obj);
-			return repository.save(entity);
-		} catch (PessoaNotFoundException e){
-			throw new PessoaNotFoundException("Pessoa com id " + id + " não encontrada");
-		}
+					() -> new PessoaNotFoundException(id));
+			Pessoa requestToEntity = modelMapper.map(dto, Pessoa.class);
+			// metodo "updateData" é um builder que define a lógica de persistência no Banco
+			verificarEmailNoBanco(requestToEntity);
+			updateData(entity, modelMapper.map(requestToEntity, PessoaRequest.class));
+			return modelMapper.map(entity, PessoaResponse.class);
 	}
 
 	public void delete(Long id) {
 		repository.delete(repository.findById(id).orElseThrow(
-				() -> new PessoaNotFoundException("Pessoa com id " + id + " não encontrada")));
+				() -> new PessoaNotFoundException(id)));
 	}
 
-	// Colocar nesse metodo, apenas os campos que poderão ser atualizados
-	private void updateData(Pessoa entity, Pessoa obj) {
-		entity.setName(obj.getName());
-		entity.setAge(obj.getAge());
-		entity.setEmail(obj.getEmail());
+	// inserir nesse metodo, apenas os campos que poderão ser atualizados
+	// Entidade -- DTO
+	private void updateData(Pessoa entity, PessoaRequest obj) {
+		if (!(entity.getName().equals(obj.getName()))) {
+			entity.setName(obj.getName());
+		}
+		if (!(entity.getAge().equals(obj.getAge()))) {
+			entity.setAge(obj.getAge());
+		}
+		if (!(entity.getEmail().equals(obj.getEmail()))){
+			entity.setEmail(obj.getEmail());
+		}
+		if (!(entity.getEndereco().getId().equals(obj.getIdEndereco()))) {
+			entity.setEndereco(addressRepository.findById
+				(obj.getIdEndereco()).orElseThrow(
+				() -> new EnderecoNotFoundException("Emdereço não encontrado")));
+		}
 	}
 
+	@Transactional
 	public Pessoa atualizaPessoaEndereco(Long idPessoa, Long idEndereco){
-		Pessoa pessoa = repository.findById(idPessoa).orElseThrow(() -> new RuntimeException("Id de pessoa não encontrado!"));
-		Address endereco = addressRepository.findById(idEndereco).orElseThrow(() -> new RuntimeException("Id de endereço não encontrado!"));
+		Pessoa pessoa = repository.findById(idPessoa).orElseThrow(
+				() -> new PessoaNotFoundException(idPessoa));
+		Address endereco = addressRepository.findById(idEndereco).orElseThrow(
+				() -> new PessoaNotFoundException(idPessoa));
 
 		for(Pessoa pessoas : endereco.getPessoas()) {
 			if (pessoas.getEmail().equals(pessoa.getEmail())){
-				throw new RuntimeException("Email já existe naquele endereço!");
+				throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
 			}
 		}
 
@@ -96,17 +112,9 @@ public class PessoaService {
 		return pessoa;
 	}
 
-	public void verificarEmailNoBanco(Pessoa pessoa){
-		try {
-			List<Pessoa> pessoaNoBanco = repository.findAll();
-
-			for (Pessoa persons : pessoaNoBanco) {
-				if (persons.getEmail().equals(pessoa.getEmail())) {
-					throw new RuntimeException("E-mail já existente!");
-				}
-			}
-		} catch (RuntimeException e){
-			throw new RuntimeException("Erro ao cadastrar e-mail");
+	private void verificarEmailNoBanco(Pessoa pessoa){
+		if (repository.existsByEmailAndIdNot(pessoa.getEmail(), pessoa.getId())) {
+			throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
 		}
 	}
 

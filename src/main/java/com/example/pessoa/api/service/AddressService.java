@@ -33,7 +33,8 @@ public class AddressService {
     }
 
     public AddressResponse findById(Long id){
-            Address enderecoEntity = addressRepository.findById(id).orElseThrow(() -> new EnderecoNotFoundException("Endereço não encontrado"));
+            Address enderecoEntity = addressRepository.findById(id).orElseThrow(
+                    () -> new EnderecoNotFoundException("Endereço com Id " + id + " encontrado"));
             return modelMapper.map(enderecoEntity, AddressResponse.class);
     }
 
@@ -46,7 +47,7 @@ public class AddressService {
     public AddressResponse update(Long id, AddressRequest dto) {
             Address enderecoAtual = addressRepository
                     .findById(id)
-                    .orElseThrow( () -> new EnderecoNotFoundException("Endereço com Id: " + id + " não encontrado"));
+                    .orElseThrow( () -> new EnderecoNotFoundException("Endereço com Id " + id + " não encontrado"));
 
             atualizaAddress(enderecoAtual, dto);
             Address enderecoSalvo = addressRepository.save(enderecoAtual);
@@ -56,7 +57,7 @@ public class AddressService {
 
     public void delete(Long id) {
         addressRepository.delete(addressRepository.findById(id).orElseThrow(
-                () -> new EnderecoNotFoundException("Endereço com Id: " + id + " não encontrado")));
+                () -> new EnderecoNotFoundException("Endereço com Id " + id + " não encontrado")));
     }
 
 }

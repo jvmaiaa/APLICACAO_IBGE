@@ -11,4 +11,8 @@ public class PessoaNotFoundException extends RuntimeException {
         super(message);
     }
 
+    public PessoaNotFoundException(Long id){
+        super(String.format("Pessoa com id %d não encontrada", id));
+    }
+
 }

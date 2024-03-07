@@ -46,10 +46,9 @@ public class PessoaResource {
 
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public Pessoa update(@PathVariable @NotNull @Positive Long id,
-						 @RequestBody @Valid Pessoa obj){
-		obj = service.update(id, obj);
-		return obj;
+	public PessoaResponse update(@PathVariable @NotNull @Positive Long id,
+						 @RequestBody @Valid PessoaRequest obj){
+		return service.update(id, obj);
 	}
 
 	/**
