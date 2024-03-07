@@ -61,13 +61,14 @@ public class PessoaService {
 
 	@Transactional
 	public PessoaResponse update(Long id, PessoaRequest dto){
-			Pessoa entity = repository.findById(id).orElseThrow(
-					() -> new PessoaNotFoundException(id));
-			Pessoa requestToEntity = modelMapper.map(dto, Pessoa.class);
-			// metodo "updateData" é um builder que define a lógica de persistência no Banco
-			verificarEmailNoBanco(requestToEntity);
-			updateData(entity, modelMapper.map(requestToEntity, PessoaRequest.class));
-			return modelMapper.map(entity, PessoaResponse.class);
+		Pessoa entity = repository.findById(id).orElseThrow(
+				() -> new PessoaNotFoundException(id));
+		Pessoa requestToEntity = modelMapper.map(dto, Pessoa.class);
+		// metodo "updateData" é um builder que define a lógica de persistência no Banco
+		verificarEmailNoBanco(entity, requestToEntity);
+		updateData(entity, modelMapper.map(requestToEntity, PessoaRequest.class));
+		repository.save(entity);
+		return modelMapper.map(entity, PessoaResponse.class);
 	}
 
 	public void delete(Long id) {
@@ -90,7 +91,7 @@ public class PessoaService {
 		if (!(entity.getEndereco().getId().equals(obj.getIdEndereco()))) {
 			entity.setEndereco(addressRepository.findById
 				(obj.getIdEndereco()).orElseThrow(
-				() -> new EnderecoNotFoundException("Emdereço não encontrado")));
+				() -> new EnderecoNotFoundException(obj.getIdEndereco())));
 		}
 	}
 
@@ -112,9 +113,11 @@ public class PessoaService {
 		return pessoa;
 	}
 
-	private void verificarEmailNoBanco(Pessoa pessoa){
-		if (repository.existsByEmailAndIdNot(pessoa.getEmail(), pessoa.getId())) {
-			throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
+	private void verificarEmailNoBanco(Pessoa pessoaDoBanco, Pessoa pessoaDaRequest){
+		if (!pessoaDoBanco.getEmail().equals(pessoaDaRequest.getEmail())) {
+			if (repository.existsByEmailAndIdNot(pessoaDaRequest.getEmail(), pessoaDoBanco.getId())) {
+				throw new EmailCadastradoExeption("E-mail já cadastrado");
+			}
 		}
 	}
 
