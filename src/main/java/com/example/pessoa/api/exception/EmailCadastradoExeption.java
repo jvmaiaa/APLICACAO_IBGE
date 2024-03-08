@@ -4,6 +4,8 @@ import java.io.Serial;
 
 public class EmailCadastradoExeption extends RuntimeException {
 
+    private static final String EMAIL_EM_USO = "E-mail já está cadastrado no sistema";
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -12,7 +14,7 @@ public class EmailCadastradoExeption extends RuntimeException {
     }
 
     public EmailCadastradoExeption (){
-        super();
+        super(EMAIL_EM_USO);
     }
 
 }

@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class PessoaService {
 
-	private static final String EMAIL_CADASTRADO = "E-mail já está cadastrado no sistema";
-
 	@Autowired
 	private PessoaRepository repository;
 
@@ -53,7 +51,7 @@ public class PessoaService {
 		Pessoa pessoaEntity = modelMapper.map(obj, Pessoa.class);
 
 		if (repository.existsByEmail(pessoaEntity.getEmail())) {
-			throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
+			throw new EmailCadastradoExeption();
 		}
 		repository.save(pessoaEntity);
 		return modelMapper.map(pessoaEntity, PessoaResponse.class);
@@ -104,7 +102,7 @@ public class PessoaService {
 
 		for(Pessoa pessoas : endereco.getPessoas()) {
 			if (pessoas.getEmail().equals(pessoa.getEmail())){
-				throw new EmailCadastradoExeption(EMAIL_CADASTRADO);
+				throw new EmailCadastradoExeption();
 			}
 		}
 
@@ -116,7 +114,7 @@ public class PessoaService {
 	private void verificarEmailNoBanco(Pessoa pessoaDoBanco, Pessoa pessoaDaRequest){
 		if (!pessoaDoBanco.getEmail().equals(pessoaDaRequest.getEmail())) {
 			if (repository.existsByEmailAndIdNot(pessoaDaRequest.getEmail(), pessoaDoBanco.getId())) {
-				throw new EmailCadastradoExeption("E-mail já cadastrado");
+				throw new EmailCadastradoExeption();
 			}
 		}
 	}
