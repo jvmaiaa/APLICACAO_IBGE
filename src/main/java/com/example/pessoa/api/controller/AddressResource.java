@@ -29,8 +29,7 @@ public class AddressResource {
     @GetMapping
     @ResponseStatus(OK)
     public List<AddressResponse> getAllAddres(){
-        List<AddressResponse> list = service.findAll();
-        return list;
+        return service.findAll();
     }
 
     @GetMapping(value = "/{id}")
