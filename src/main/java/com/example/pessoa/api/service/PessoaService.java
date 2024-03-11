@@ -10,24 +10,22 @@ import com.example.pessoa.api.exception.PessoaNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
 
-	@Autowired
-	private PessoaRepository repository;
+	private final PessoaRepository repository;
 
-	@Autowired
-	private AddressRepository addressRepository;
+	private  final AddressRepository addressRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+	private final ModelMapper modelMapper;
 	
 	public List<PessoaResponse> findAll() {
 		return repository.findAll()

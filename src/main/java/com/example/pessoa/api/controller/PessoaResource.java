@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +19,10 @@ import static org.springframework.http.HttpStatus.*;
 @Validated
 @RestController
 @RequestMapping(value = "/api/v1")
+@RequiredArgsConstructor
 public class PessoaResource {
 
-	@Autowired
-	private PessoaService service;
+	private final PessoaService service;
 	
 	@GetMapping
 	@ResponseStatus(OK)
@@ -53,7 +53,7 @@ public class PessoaResource {
 
 	/**
 	 * Atualiza o endereço associado a uma pessoa identificada pelo ID.
-	 * @param idPessoa - Identificador único da pessoa.
+	 * @param idPessoa - Id da pessoa existente.
 	 * @param idEndereco - Id do novo endereço.
 	 * @return Retorna a entidade Pessoa atualizada com o novo endereço.
 	 */

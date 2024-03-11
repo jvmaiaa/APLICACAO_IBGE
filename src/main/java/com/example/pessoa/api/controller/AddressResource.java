@@ -2,11 +2,9 @@ package com.example.pessoa.api.controller;
 
 import com.example.pessoa.api.dto.request.AddressRequest;
 import com.example.pessoa.api.dto.response.AddressResponse;
-import com.example.pessoa.api.repository.AddressRepository;
-import com.example.pessoa.api.repository.PessoaRepository;
 import com.example.pessoa.api.service.AddressService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,17 +12,12 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/v2")
 public class AddressResource {
 
-    @Autowired
-    private AddressRepository repository;
-    @Autowired
-    private PessoaRepository pessoaRepository;
-
-    @Autowired
-    private AddressService service;
+    private final AddressService service;
 
     @GetMapping
     @ResponseStatus(OK)

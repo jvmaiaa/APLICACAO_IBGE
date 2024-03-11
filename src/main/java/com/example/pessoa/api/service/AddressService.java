@@ -5,9 +5,8 @@ import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.exception.EnderecoNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
-import com.example.pessoa.api.repository.PessoaRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +14,13 @@ import java.util.stream.Collectors;
 
 import static com.example.pessoa.api.mapper.AddressMapper.*;
 
+@RequiredArgsConstructor
 @Service
 public class AddressService {
-    @Autowired
-    private AddressRepository addressRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final AddressRepository addressRepository;
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    private final ModelMapper modelMapper;
 
     public List<AddressResponse> findAll(){
         return addressRepository.findAll()
