@@ -8,9 +8,9 @@
 
 # Sobre o projeto
 
-Este é um projeto que desenvolvi com a finalidade de aprofundar meus conhecimentos com o uso de **Java** com **Spring Framework**. Pode-se perceber algumas melhoras desde o primeiro commit até o commit atual, e ainda com possíveis pontos que possam ser melhorados. Sinta-se à vontade para deixar sua contribuição e opinião no projeto, caso queira, pode entrar em contato por alguma das minhas redes sociais disponíveis.
+Este é um projeto que desenvolvi com a finalidade de aprofundar meus conhecimentos com o uso de **Java** com **Spring Framework**. Pode-se perceber algumas melhoras desde o primeiro commit até o commit atual. Sinta-se à vontade para deixar sua contribuição e opinião no projeto, caso queira, pode entrar em contato por alguma das minhas redes sociais disponíveis para destacar algum ponto que possa ser melhorado.
 
-A aplicação consiste em um sistema de cadastro de **Endereços** e **Famílias**, tal que, 1 pessoa só possui 1 endereço, e 1 endereço pode possuir N pessoas. Em alguns casos específicos eu implementei algumas validações, que caso não sejam satisfeitas, podem realizar algumas exceções, com isso, tive a obrigação de fazer o tratamento de muitos comportamentos da aplicação.
+A aplicação consiste em um sistema de cadastro de **Endereços** e **Famílias**, tal que, 1 pessoa só possui 1 endereço, e 1 endereço pode possuir N pessoas. Em alguns casos específicos eu implementei algumas validações, que caso não sejam satisfeitas, podem disparar algumas exceções, com isso, necessitei realizar o tratamento das mesmas na aplicação.
 
 ## Diagrama de Caso de Uso
 ![diagrama](<Caso de Uso Sistema IBGE.png>)
