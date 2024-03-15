@@ -12,10 +12,10 @@ Este é um projeto que desenvolvi com a finalidade de aprofundar meus conhecimen
 
 A aplicação consiste em um sistema de cadastro de **Endereços** e **Famílias**, tal que, 1 pessoa só possui 1 endereço, e 1 endereço pode possuir N pessoas. Em alguns casos específicos eu implementei algumas validações, que caso não sejam satisfeitas, podem disparar algumas exceções, com isso, necessitei realizar o tratamento das mesmas na aplicação.
 
-## Diagrama de Caso de Uso
+## Fluxograma de funcionamento
 ![diagrama](<Caso de Uso Sistema IBGE.png>)
 
-## Endpoints disponíveis
+## Endpoints disponíveis (URIs)
 Para vizualizar todos os endpoints disponíveis da aplicação com mais detalhes, acesse:
 - Vale ressaltar que você precisa **executar a aplicação antes.**
 - `http://localhost:8080/swagger-ui/index.html`
