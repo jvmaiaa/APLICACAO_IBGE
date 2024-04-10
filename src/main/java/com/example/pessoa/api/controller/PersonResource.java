@@ -1,9 +1,9 @@
 package com.example.pessoa.api.controller;
 
-import com.example.pessoa.api.dto.request.PessoaRequest;
-import com.example.pessoa.api.dto.response.PessoaResponse;
-import com.example.pessoa.api.entity.Pessoa;
-import com.example.pessoa.api.service.PessoaService;
+import com.example.pessoa.api.dto.request.PersonRequest;
+import com.example.pessoa.api.dto.response.PersonResponse;
+import com.example.pessoa.api.entity.Person;
+import com.example.pessoa.api.service.PersonService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,25 +20,25 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping(value = "/api/v1")
 @RequiredArgsConstructor
-public class PessoaResource {
+public class PersonResource {
 
-	private final PessoaService service;
+	private final PersonService service;
 	
 	@GetMapping
 	@ResponseStatus(OK)
-	public List<PessoaResponse> findAll() {
+	public List<PersonResponse> findAll() {
 		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public PessoaResponse findById(@PathVariable @NotNull @Positive Long id){
+	public PersonResponse findById(@PathVariable @NotNull @Positive Long id){
 		return service.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public PessoaResponse insert(@RequestBody @Valid PessoaRequest obj) {
+	public PersonResponse insert(@RequestBody @Valid PersonRequest obj) {
 		return service.insert(obj);
 		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
@@ -46,8 +46,8 @@ public class PessoaResource {
 
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public PessoaResponse update(@PathVariable @NotNull @Positive Long id,
-						 @RequestBody @Valid PessoaRequest obj){
+	public PersonResponse update(@PathVariable @NotNull @Positive Long id,
+								 @RequestBody @Valid PersonRequest obj){
 		return service.update(id, obj);
 	}
 
@@ -59,8 +59,8 @@ public class PessoaResource {
 	 */
 	 @PutMapping("/{idPessoa}/{idEndereco}")
 	@ResponseStatus(OK)
-	public Pessoa atualizaPessoa(@PathVariable @NotBlank @Positive Long idPessoa,
-								 @PathVariable @NotBlank @Positive Long idEndereco) {
+	public Person atualizaPessoa(@PathVariable @NotBlank @Positive Long idPessoa,
+                                 @PathVariable @NotBlank @Positive Long idEndereco) {
 		return service.atualizaPessoaEndereco(idPessoa, idEndereco);
 	}
 

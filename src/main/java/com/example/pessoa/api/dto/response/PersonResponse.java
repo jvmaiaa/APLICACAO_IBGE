@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PessoaResponse {
+public class PersonResponse {
 
     private Long id;
     private String name;
     private Integer age;
     private String email;
-    private Long idEndereco;
+    private Long idAddress;
 }

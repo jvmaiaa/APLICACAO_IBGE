@@ -16,27 +16,23 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class AddressRequest {
 
-    @NotNull
-    @NotBlank
-    @Length(max = 100)
-    private String nomeDaRua;
+    @NotBlank(message = "The street name field cannot be blank")
+    @Length(max = 100, message = "You have exceeded the 100 character length")
+    private String streetName;
 
-    @NotNull
-    @Positive
-    private Integer numeroDaCasa;
+    @NotNull(message = "The house number field cannot be null")
+    @Positive(message = "The house number field must be a positive number")
+    private Integer houseNumber;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 50)
-    private String bairro;
+    @NotBlank(message = "The district field cannot be blank")
+    @Length(max = 100, message = "You have exceeded the 100 character length")
+    private String district;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 50)
-    private String cidade;
+    @NotBlank(message = "The city field cannot be blank")
+    @Length(max = 100, message = "You have exceeded the 100 character length")
+    private String city;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 10)
-    private String estado;
+    @NotBlank(message = "The state field cannot be blank")
+    @Length(max = 10, message = "You have exceeded the 10 character length")
+    private String state;
 }

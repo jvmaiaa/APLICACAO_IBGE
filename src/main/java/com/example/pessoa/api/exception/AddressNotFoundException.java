@@ -2,16 +2,16 @@ package com.example.pessoa.api.exception;
 
 import java.io.Serial;
 
-public class EnderecoNotFoundException extends RuntimeException{
+public class AddressNotFoundException extends RuntimeException{
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public EnderecoNotFoundException(String message){
+    public AddressNotFoundException(String message){
         super(message);
     }
 
-    public EnderecoNotFoundException(Long id){
+    public AddressNotFoundException(Long id){
         super(String.format("Endereço com id %d não encontrada", id));
     }
 }

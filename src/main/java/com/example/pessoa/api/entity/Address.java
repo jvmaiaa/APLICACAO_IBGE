@@ -4,11 +4,7 @@ package com.example.pessoa.api.entity;
 
 import com.example.pessoa.api.dto.request.AddressRequest;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,45 +26,26 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 100)
-    @Column(length = 100, nullable = false)
-    private String nomeDaRua;
+    @Column(length = 100)
+    private String streetName;
 
-    @NotNull
-    @Positive
-    @Column(length = 5, nullable = false)
-    private Integer numeroDaCasa;
+    private Integer houseNumber;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 50)
-    @Column(length = 50, nullable = false)
-    private String bairro;
+    private String district;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 50)
-    @Column(length = 50, nullable = false)
-    private String cidade;
+    private String city;
 
-    @NotNull
-    @NotBlank
-    @Length(max = 10)
-    @Column(length = 10, nullable = false)
-    private String estado;
+    private String state;
 
+    @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
+    private List<Person> people = new ArrayList<>();
 
-    @OneToMany(mappedBy = "endereco", cascade = CascadeType.PERSIST)
-    private List<Pessoa> pessoas = new ArrayList<>();
-
-    public Address (AddressRequest requestAddressDTO){
-        this.nomeDaRua = requestAddressDTO.getNomeDaRua();
-        this.numeroDaCasa = requestAddressDTO.getNumeroDaCasa();
-        this.bairro = requestAddressDTO.getBairro();
-        this.cidade = requestAddressDTO.getCidade();
-        this.estado = requestAddressDTO.getEstado();
+    public Address(AddressRequest requestAddressDTO){
+        this.streetName = requestAddressDTO.getStreetName();
+        this.houseNumber = requestAddressDTO.getHouseNumber();
+        this.district = requestAddressDTO.getDistrict();
+        this.city = requestAddressDTO.getCity();
+        this.state = requestAddressDTO.getState();
     }
 
 }

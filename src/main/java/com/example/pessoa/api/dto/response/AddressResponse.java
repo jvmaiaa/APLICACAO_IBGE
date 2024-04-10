@@ -20,5 +20,5 @@ public class AddressResponse {
     private String cidade;
     private String estado;
 
-    private List<PessoaResponse> pessoas;
+    private List<PersonResponse> people;
 }

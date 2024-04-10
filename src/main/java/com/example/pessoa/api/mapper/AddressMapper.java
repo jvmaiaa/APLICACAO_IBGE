@@ -9,30 +9,30 @@ public class AddressMapper {
     public static Address toAddressEntity(AddressRequest request){
 
         Address address = new Address();
-        address.setNomeDaRua(request.getNomeDaRua());
-        address.setNumeroDaCasa(request.getNumeroDaCasa());
-        address.setBairro(request.getBairro());
-        address.setCidade(request.getCidade());
-        address.setEstado(request.getEstado());
+        address.setStreetName(request.getStreetName());
+        address.setHouseNumber(request.getHouseNumber());
+        address.setDistrict(request.getDistrict());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
         return address;
     }
 
     public static AddressResponse toAddressResponse(Address address){
         AddressResponse response = new AddressResponse();
         response.setId(address.getId());
-        response.setNomeDaRua(address.getNomeDaRua());
-        response.setNumeroDaCasa(address.getNumeroDaCasa());
-        response.setBairro(address.getBairro());
-        response.setCidade(address.getCidade());
-        response.setEstado(address.getEstado());
+        response.setNomeDaRua(address.getStreetName());
+        response.setNumeroDaCasa(address.getHouseNumber());
+        response.setBairro(address.getDistrict());
+        response.setCidade(address.getCity());
+        response.setEstado(address.getState());
         return response;
     }
 
     public static void atualizaAddress(Address entity, AddressRequest request) {
-        entity.setNomeDaRua(request.getNomeDaRua());
-        entity.setNumeroDaCasa(request.getNumeroDaCasa());
-        entity.setBairro(request.getBairro());
-        entity.setCidade(request.getCidade());
-        entity.setEstado(request.getEstado());
+        entity.setStreetName(request.getStreetName());
+        entity.setHouseNumber(request.getHouseNumber());
+        entity.setDistrict(request.getDistrict());
+        entity.setCity(request.getCity());
+        entity.setState(request.getState());
     }
 }

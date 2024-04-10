@@ -9,21 +9,21 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
 
-    @ExceptionHandler(PessoaNotFoundException.class)
+    @ExceptionHandler(PersonNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
-    public String handlePessoaNotFoundException(PessoaNotFoundException e){
+    public String handlePessoaNotFoundException(PersonNotFoundException e){
         return e.getMessage();
     }
 
-    @ExceptionHandler(EnderecoNotFoundException.class)
+    @ExceptionHandler(AddressNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
-    public String handleEnderecoNotFoundException(EnderecoNotFoundException e) {
+    public String handleEnderecoNotFoundException(AddressNotFoundException e) {
         return e.getMessage();
     }
 
-    @ExceptionHandler(EmailCadastradoExeption.class)
+    @ExceptionHandler(EmailRegisteredExeption.class)
     @ResponseStatus(BAD_REQUEST)
-    public String handleEmailCadastradoExeption(EmailCadastradoExeption e){
+    public String handleEmailCadastradoExeption(EmailRegisteredExeption e){
         return e.getMessage();
     }
 }

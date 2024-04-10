@@ -17,36 +17,37 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(value = "/api/v2")
 public class AddressResource {
 
-    private final AddressService service;
+    private final AddressService addressService;
 
     @GetMapping
     @ResponseStatus(OK)
     public List<AddressResponse> getAllAddres(){
-        return service.findAll();
+        return addressService.findAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(OK)
     public AddressResponse findById(@PathVariable Long id){
         // Usamos o tipo OPTIONAL quando temos algum objeto que pode NÃO VIR
-        return service.findById(id);
+        return addressService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
     public AddressResponse insertAddress(@RequestBody @Valid AddressRequest obj) {
-        return service.insert(obj);
+        return addressService.insert(obj);
     }
 
 
     @PutMapping("/{id}")
     @ResponseStatus(OK)
-    public AddressResponse updateAddress(@PathVariable Long id, @RequestBody AddressRequest dto) {
-       return service.update(id, dto);
+    public AddressResponse updateAddress(@PathVariable Long id,
+                                         @RequestBody AddressRequest dto) {
+       return addressService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void deleteAddress(@PathVariable Long id) {
-        service.delete(id);
+        addressService.delete(id);
     }
 }

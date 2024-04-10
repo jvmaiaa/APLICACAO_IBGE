@@ -3,7 +3,7 @@ package com.example.pessoa.api.service;
 import com.example.pessoa.api.dto.request.AddressRequest;
 import com.example.pessoa.api.dto.response.AddressResponse;
 import com.example.pessoa.api.entity.Address;
-import com.example.pessoa.api.exception.EnderecoNotFoundException;
+import com.example.pessoa.api.exception.AddressNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -30,7 +30,7 @@ public class AddressService {
 
     public AddressResponse findById(Long id){
             Address enderecoEntity = addressRepository.findById(id).orElseThrow(
-                    () -> new EnderecoNotFoundException(id));
+                    () -> new AddressNotFoundException(id));
             return modelMapper.map(enderecoEntity, AddressResponse.class);
     }
 
@@ -43,7 +43,7 @@ public class AddressService {
     public AddressResponse update(Long id, AddressRequest dto) {
             Address enderecoAtual = addressRepository
                     .findById(id)
-                    .orElseThrow( () -> new EnderecoNotFoundException(id));
+                    .orElseThrow( () -> new AddressNotFoundException(id));
 
             atualizaAddress(enderecoAtual, dto);
             Address enderecoSalvo = addressRepository.save(enderecoAtual);
@@ -53,7 +53,7 @@ public class AddressService {
 
     public void delete(Long id) {
         addressRepository.delete(addressRepository.findById(id).orElseThrow(
-                () -> new EnderecoNotFoundException(id)));
+                () -> new AddressNotFoundException(id)));
     }
 
 }
