@@ -20,19 +20,19 @@ public class AddressMapper {
     public static AddressResponse toAddressResponse(Address address){
         AddressResponse response = new AddressResponse();
         response.setId(address.getId());
-        response.setNomeDaRua(address.getStreetName());
-        response.setNumeroDaCasa(address.getHouseNumber());
-        response.setBairro(address.getDistrict());
-        response.setCidade(address.getCity());
-        response.setEstado(address.getState());
+        response.setStreetName(address.getStreetName());
+        response.setHouseNumber(address.getHouseNumber());
+        response.setDistrict(address.getDistrict());
+        response.setCity(address.getCity());
+        response.setState(address.getState());
         return response;
     }
 
-    public static void atualizaAddress(Address entity, AddressRequest request) {
-        entity.setStreetName(request.getStreetName());
-        entity.setHouseNumber(request.getHouseNumber());
-        entity.setDistrict(request.getDistrict());
-        entity.setCity(request.getCity());
-        entity.setState(request.getState());
+    public static void updateAddress(Address entity, AddressRequest request) {
+        entity.setStreetName(request.getStreetName() != null ? request.getStreetName() : entity.getStreetName());
+        entity.setHouseNumber(request.getHouseNumber() != null ? request.getHouseNumber() : entity.getHouseNumber());
+        entity.setDistrict(request.getDistrict() != null ? request.getDistrict() : entity.getDistrict());
+        entity.setCity(request.getCity() != null ? request.getCity() : entity.getCity());
+        entity.setState(request.getState() != null ? request.getState() : entity.getState());
     }
 }

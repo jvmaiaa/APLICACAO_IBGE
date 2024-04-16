@@ -14,11 +14,11 @@ import java.util.List;
 public class AddressResponse {
 
     private Long id;
-    private String nomeDaRua;
-    private Integer numeroDaCasa;
-    private String bairro;
-    private String cidade;
-    private String estado;
+    private String streetName;
+    private Integer houseNumber;
+    private String district;
+    private String city;
+    private String state;
 
     private List<PersonResponse> people;
 }

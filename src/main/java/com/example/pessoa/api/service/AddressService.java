@@ -25,30 +25,30 @@ public class AddressService {
     public List<AddressResponse> findAll(){
         return addressRepository.findAll()
                 .stream()
-                .map(endereco -> modelMapper.map(endereco, AddressResponse.class)).collect(Collectors.toList());
+                .map(address -> modelMapper.map(address, AddressResponse.class)).collect(Collectors.toList());
     }
 
     public AddressResponse findById(Long id){
-            Address enderecoEntity = addressRepository.findById(id).orElseThrow(
+            Address currentAddress = addressRepository.findById(id).orElseThrow(
                     () -> new AddressNotFoundException(id));
-            return modelMapper.map(enderecoEntity, AddressResponse.class);
+            return modelMapper.map(currentAddress, AddressResponse.class);
     }
 
     public AddressResponse insert(AddressRequest obj) {
-        Address endereco = toAddressEntity(obj);
-        addressRepository.save(endereco);
-        return modelMapper.map(endereco, AddressResponse.class);
+        Address address = toAddressEntity(obj);
+        addressRepository.save(address);
+        return modelMapper.map(address, AddressResponse.class);
     }
 
     public AddressResponse update(Long id, AddressRequest dto) {
-            Address enderecoAtual = addressRepository
+            Address currentAddress = addressRepository
                     .findById(id)
                     .orElseThrow( () -> new AddressNotFoundException(id));
 
-            atualizaAddress(enderecoAtual, dto);
-            Address enderecoSalvo = addressRepository.save(enderecoAtual);
+            updateAddress(currentAddress, dto);
+            Address savedAddress = addressRepository.save(currentAddress);
 
-            return toAddressResponse(enderecoSalvo);
+            return toAddressResponse(savedAddress);
     }
 
     public void delete(Long id) {

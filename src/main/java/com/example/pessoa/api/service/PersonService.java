@@ -38,31 +38,31 @@ public class PersonService {
 	}
 	
 	public PersonResponse findById(Long id) {
-		Person pessoaEntity = repository.
+		Person entityPerson = repository.
 			findById(id).
 			orElseThrow(
 				() -> new PersonNotFoundException(id));
-		return modelMapper.map(pessoaEntity, PersonResponse.class);
+		return modelMapper.map(entityPerson, PersonResponse.class);
 	}
 
 	public PersonResponse insert(PersonRequest obj) {
-		Person pessoaEntity = modelMapper.map(obj, Person.class);
+		Person entityPerson = modelMapper.map(obj, Person.class);
 
-		if (repository.existsByEmail(pessoaEntity.getEmail())) {
+		if (repository.existsByEmail(entityPerson.getEmail())) {
 			throw new EmailRegisteredExeption();
 		}
-		repository.save(pessoaEntity);
-		return modelMapper.map(pessoaEntity, PersonResponse.class);
+		repository.save(entityPerson);
+		return modelMapper.map(entityPerson, PersonResponse.class);
 	}
 
 	@Transactional
 	public PersonResponse update(Long id, PersonRequest dto){
 		Person entity = repository.findById(id).orElseThrow(
 				() -> new PersonNotFoundException(id));
-		Person requestToEntity = modelMapper.map(dto, Person.class);
+		Person dtoToEntity = modelMapper.map(dto, Person.class);
 		// metodo "updateData" é um builder que define a lógica de persistência no Banco
-		verificarEmailNoBanco(entity, requestToEntity);
-		updateData(entity, modelMapper.map(requestToEntity, PersonRequest.class));
+		verificarEmailNoBanco(entity, dtoToEntity);
+		updateData(entity, modelMapper.map(dtoToEntity, PersonRequest.class));
 		repository.save(entity);
 		return modelMapper.map(entity, PersonResponse.class);
 	}
@@ -93,25 +93,25 @@ public class PersonService {
 
 	@Transactional
 	public Person atualizaPessoaEndereco(Long idPessoa, Long idEndereco){
-		Person pessoa = repository.findById(idPessoa).orElseThrow(
+		Person person = repository.findById(idPessoa).orElseThrow(
 				() -> new PersonNotFoundException(idPessoa));
-		Address endereco = addressRepository.findById(idEndereco).orElseThrow(
+		Address address = addressRepository.findById(idEndereco).orElseThrow(
 				() -> new PersonNotFoundException(idPessoa));
 
-		for(Person pessoas : endereco.getPeople()) {
-			if (pessoas.getEmail().equals(pessoa.getEmail())){
+		for(Person people : address.getPeople()) {
+			if (people.getEmail().equals(person.getEmail())){
 				throw new EmailRegisteredExeption();
 			}
 		}
 
-		pessoa.setAddress(endereco);
-		repository.save(pessoa);
-		return pessoa;
+		person.setAddress(address);
+		repository.save(person);
+		return person;
 	}
 
-	private void verificarEmailNoBanco(Person pessoaDoBanco, Person pessoaDaRequest){
-		if (!(pessoaDoBanco.getEmail().equals(pessoaDaRequest.getEmail()))) {
-			if (repository.existsByEmailAndIdNot(pessoaDaRequest.getEmail(), pessoaDoBanco.getId())) {
+	private void verificarEmailNoBanco(Person registeredPerson, Person insertPerson){
+		if (!(registeredPerson.getEmail().equals(insertPerson.getEmail()))) {
+			if (repository.existsByEmailAndIdNot(insertPerson.getEmail(), registeredPerson.getId())) {
 				throw new EmailRegisteredExeption();
 			}
 		}
