@@ -3,7 +3,7 @@ package com.example.pessoa.api.controller;
 import com.example.pessoa.api.dto.request.PersonRequest;
 import com.example.pessoa.api.dto.response.PersonResponse;
 import com.example.pessoa.api.entity.Person;
-import com.example.pessoa.api.service.PersonService;
+import com.example.pessoa.api.service.impl.PersonServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class PersonResource {
 
-	private final PersonService service;
+	private final PersonServiceImpl service;
 	
 	@GetMapping
 	@ResponseStatus(OK)

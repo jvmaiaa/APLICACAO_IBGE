@@ -4,20 +4,20 @@ package com.example.pessoa.api.entity;
 
 import com.example.pessoa.api.dto.request.AddressRequest;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "tb_address")
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Address implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

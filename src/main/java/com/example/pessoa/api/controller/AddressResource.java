@@ -2,7 +2,7 @@ package com.example.pessoa.api.controller;
 
 import com.example.pessoa.api.dto.request.AddressRequest;
 import com.example.pessoa.api.dto.response.AddressResponse;
-import com.example.pessoa.api.service.AddressService;
+import com.example.pessoa.api.service.impl.AddressServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping(value = "/api/v2")
 public class AddressResource {
 
-    private final AddressService addressService;
+    private final AddressServiceImpl addressService;
 
     @GetMapping
     @ResponseStatus(OK)
