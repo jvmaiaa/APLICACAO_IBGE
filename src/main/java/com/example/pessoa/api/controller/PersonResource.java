@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @Validated
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonResource {
 

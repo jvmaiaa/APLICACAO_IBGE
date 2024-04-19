@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/v2")
+@RequestMapping(value = "/api/address")
 public class AddressResource {
 
     private final AddressServiceImpl addressService;
