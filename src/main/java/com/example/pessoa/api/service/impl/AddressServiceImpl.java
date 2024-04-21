@@ -23,24 +23,28 @@ public class AddressServiceImpl implements AddressService {
 
     private final ModelMapper modelMapper;
 
+    @Override
     public List<AddressResponse> findAll(){
         return addressRepository.findAll()
                 .stream()
                 .map(address -> modelMapper.map(address, AddressResponse.class)).collect(Collectors.toList());
     }
 
+    @Override
     public AddressResponse findById(Long id){
             Address currentAddress = addressRepository.findById(id).orElseThrow(
                     () -> new AddressNotFoundException(id));
             return modelMapper.map(currentAddress, AddressResponse.class);
     }
 
+    @Override
     public AddressResponse insert(AddressRequest obj) {
         Address address = toAddressEntity(obj);
         addressRepository.save(address);
         return modelMapper.map(address, AddressResponse.class);
     }
 
+    @Override
     public AddressResponse update(Long id, AddressRequest dto) {
             Address currentAddress = addressRepository
                     .findById(id)
@@ -52,6 +56,7 @@ public class AddressServiceImpl implements AddressService {
             return toAddressResponse(savedAddress);
     }
 
+    @Override
     public void delete(Long id) {
         addressRepository.delete(addressRepository.findById(id).orElseThrow(
                 () -> new AddressNotFoundException(id)));

@@ -61,7 +61,7 @@ public class PersonResource {
 	@ResponseStatus(OK)
 	public Person atualizaPessoa(@PathVariable @NotBlank @Positive Long idPessoa,
                                  @PathVariable @NotBlank @Positive Long idEndereco) {
-		return service.atualizaPessoaEndereco(idPessoa, idEndereco);
+		return service.updatePersonAddress(idPessoa, idEndereco);
 	}
 
 	@DeleteMapping(value = "/{id}")

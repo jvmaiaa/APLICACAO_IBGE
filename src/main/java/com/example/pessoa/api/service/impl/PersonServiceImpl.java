@@ -27,7 +27,8 @@ public class PersonServiceImpl implements PersonService {
 	private  final AddressRepository addressRepository;
 
 	private final ModelMapper modelMapper;
-	
+
+	@Override
 	public List<PersonResponse> findAll() {
 		return repository.findAll()
 			.stream()
@@ -37,7 +38,8 @@ public class PersonServiceImpl implements PersonService {
 				return response;
 			}).collect(Collectors.toList());
 	}
-	
+
+	@Override
 	public PersonResponse findById(Long id) {
 		Person entityPerson = repository.
 			findById(id).
@@ -46,6 +48,7 @@ public class PersonServiceImpl implements PersonService {
 		return modelMapper.map(entityPerson, PersonResponse.class);
 	}
 
+	@Override
 	public PersonResponse insert(PersonRequest obj) {
 		Person entityPerson = modelMapper.map(obj, Person.class);
 
@@ -56,25 +59,26 @@ public class PersonServiceImpl implements PersonService {
 		return modelMapper.map(entityPerson, PersonResponse.class);
 	}
 
+	@Override
 	@Transactional
 	public PersonResponse update(Long id, PersonRequest dto){
 		Person entity = repository.findById(id).orElseThrow(
 				() -> new PersonNotFoundException(id));
 		Person dtoToEntity = modelMapper.map(dto, Person.class);
 		// metodo "updateData" é um builder que define a lógica de persistência no Banco
-		verificarEmailNoBanco(entity, dtoToEntity);
+		checkEmailAtTheBank(entity, dtoToEntity);
 		updateData(entity, modelMapper.map(dtoToEntity, PersonRequest.class));
 		repository.save(entity);
 		return modelMapper.map(entity, PersonResponse.class);
 	}
 
+	@Override
 	public void delete(Long id) {
 		repository.delete(repository.findById(id)
 				.orElseThrow( () -> new PersonNotFoundException(id) ));
 	}
 
 	// inserir nesse metodo, apenas os campos que poderão ser atualizados
-	// Entidade -- DTO
 	private void updateData(Person entity, PersonRequest obj) {
 		if (!(entity.getName().equals(obj.getName()))) {
 			entity.setName(obj.getName());
@@ -93,11 +97,11 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Transactional
-	public Person atualizaPessoaEndereco(Long idPessoa, Long idEndereco){
-		Person person = repository.findById(idPessoa).orElseThrow(
-				() -> new PersonNotFoundException(idPessoa));
-		Address address = addressRepository.findById(idEndereco).orElseThrow(
-				() -> new PersonNotFoundException(idPessoa));
+	public Person updatePersonAddress(Long personId, Long AddressId){
+		Person person = repository.findById(personId).orElseThrow(
+				() -> new PersonNotFoundException(personId));
+		Address address = addressRepository.findById(AddressId).orElseThrow(
+				() -> new PersonNotFoundException(personId));
 
 		for(Person people : address.getPeople()) {
 			if (people.getEmail().equals(person.getEmail())){
@@ -110,7 +114,7 @@ public class PersonServiceImpl implements PersonService {
 		return person;
 	}
 
-	private void verificarEmailNoBanco(Person registeredPerson, Person insertPerson){
+	private void checkEmailAtTheBank(Person registeredPerson, Person insertPerson){
 		if (!(registeredPerson.getEmail().equals(insertPerson.getEmail()))) {
 			if (repository.existsByEmailAndIdNot(insertPerson.getEmail(), registeredPerson.getId())) {
 				throw new EmailRegisteredExeption();
