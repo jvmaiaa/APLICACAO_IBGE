@@ -1,7 +1,7 @@
 package com.example.pessoa.api.service.impl;
 
-import com.example.pessoa.api.dto.request.AddressRequest;
-import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.request.AddressRequestDTO;
+import com.example.pessoa.api.dto.response.AddressResponseDTO;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.exception.AddressNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
@@ -24,28 +24,28 @@ public class AddressServiceImpl implements AddressService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<AddressResponse> findAll(){
+    public List<AddressResponseDTO> findAll(){
         return addressRepository.findAll()
                 .stream()
-                .map(address -> modelMapper.map(address, AddressResponse.class)).collect(Collectors.toList());
+                .map(address -> modelMapper.map(address, AddressResponseDTO.class)).collect(Collectors.toList());
     }
 
     @Override
-    public AddressResponse findById(Long id){
+    public AddressResponseDTO findById(Long id){
             Address currentAddress = addressRepository.findById(id).orElseThrow(
                     () -> new AddressNotFoundException(id));
-            return modelMapper.map(currentAddress, AddressResponse.class);
+            return modelMapper.map(currentAddress, AddressResponseDTO.class);
     }
 
     @Override
-    public AddressResponse insert(AddressRequest obj) {
+    public AddressResponseDTO insert(AddressRequestDTO obj) {
         Address address = toAddressEntity(obj);
         addressRepository.save(address);
-        return modelMapper.map(address, AddressResponse.class);
+        return modelMapper.map(address, AddressResponseDTO.class);
     }
 
     @Override
-    public AddressResponse update(Long id, AddressRequest dto) {
+    public AddressResponseDTO update(Long id, AddressRequestDTO dto) {
             Address currentAddress = addressRepository
                     .findById(id)
                     .orElseThrow( () -> new AddressNotFoundException(id));

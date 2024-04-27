@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class AddressResponse {
+public class AddressResponseDTO {
 
     private Long id;
     private String streetName;
@@ -16,5 +16,5 @@ public class AddressResponse {
     private String city;
     private String state;
 
-    private List<PersonResponse> people;
+    private List<PersonResponseDTO> people;
 }

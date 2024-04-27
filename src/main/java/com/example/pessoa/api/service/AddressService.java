@@ -1,19 +1,19 @@
 package com.example.pessoa.api.service;
 
-import com.example.pessoa.api.dto.request.AddressRequest;
-import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.request.AddressRequestDTO;
+import com.example.pessoa.api.dto.response.AddressResponseDTO;
 
 import java.util.List;
 
 public interface AddressService {
 
-    List<AddressResponse> findAll();
+    List<AddressResponseDTO> findAll();
 
-    AddressResponse findById(Long id);
+    AddressResponseDTO findById(Long id);
 
-    AddressResponse insert(AddressRequest obj);
+    AddressResponseDTO insert(AddressRequestDTO obj);
 
-    AddressResponse update(Long id, AddressRequest dto);
+    AddressResponseDTO update(Long id, AddressRequestDTO dto);
 
     void delete(Long id);
 }

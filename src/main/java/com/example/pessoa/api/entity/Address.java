@@ -2,7 +2,7 @@ package com.example.pessoa.api.entity;
 
 // Para permitir todas as importações de uma dependencia, é usado "*" no import
 
-import com.example.pessoa.api.dto.request.AddressRequest;
+import com.example.pessoa.api.dto.request.AddressRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ public class Address implements Serializable {
     @OneToMany(mappedBy = "address", cascade = CascadeType.PERSIST)
     private List<Person> people = new ArrayList<>();
 
-    public Address(AddressRequest requestAddressDTO){
+    public Address(AddressRequestDTO requestAddressDTO){
         this.streetName = requestAddressDTO.getStreetName();
         this.houseNumber = requestAddressDTO.getHouseNumber();
         this.district = requestAddressDTO.getDistrict();

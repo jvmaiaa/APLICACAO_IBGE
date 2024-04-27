@@ -1,13 +1,10 @@
 package com.example.pessoa.api.controller;
 
-import com.example.pessoa.api.dto.request.PersonRequest;
-import com.example.pessoa.api.dto.response.PersonResponse;
-import com.example.pessoa.api.entity.Person;
+import com.example.pessoa.api.dto.request.PersonRequestDTO;
+import com.example.pessoa.api.dto.request.PersonUpdateRequestDTO;
+import com.example.pessoa.api.dto.response.PersonResponseDTO;
 import com.example.pessoa.api.service.impl.PersonServiceImpl;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +23,19 @@ public class PersonResource {
 	
 	@GetMapping
 	@ResponseStatus(OK)
-	public List<PersonResponse> findAll() {
+	public List<PersonResponseDTO> findAll() {
 		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public PersonResponse findById(@PathVariable @NotNull @Positive Long id){
+	public PersonResponseDTO findById(@PathVariable Long id){
 		return service.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public PersonResponse insert(@RequestBody @Valid PersonRequest obj) {
+	public PersonResponseDTO insert(@RequestBody @Valid PersonRequestDTO obj) {
 		return service.insert(obj);
 		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
@@ -46,8 +43,8 @@ public class PersonResource {
 
 	@PutMapping(value = "/{id}")
 	@ResponseStatus(OK)
-	public PersonResponse update(@PathVariable @NotNull @Positive Long id,
-								 @RequestBody @Valid PersonRequest obj){
+	public PersonResponseDTO update(@PathVariable Long id,
+									@RequestBody @Valid PersonUpdateRequestDTO obj){
 		return service.update(id, obj);
 	}
 
@@ -59,14 +56,14 @@ public class PersonResource {
 	 */
 	 @PutMapping("/{idPessoa}/{idEndereco}")
 	@ResponseStatus(OK)
-	public Person atualizaPessoa(@PathVariable @NotBlank @Positive Long idPessoa,
-                                 @PathVariable @NotBlank @Positive Long idEndereco) {
+	public PersonResponseDTO atualizaPessoa(@PathVariable Long idPessoa,
+                                 @PathVariable Long idEndereco) {
 		return service.updatePersonAddress(idPessoa, idEndereco);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(NO_CONTENT)
-	public void delete(@PathVariable @NotNull @Positive Long id) {
+	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}
 

@@ -4,7 +4,7 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class PersonResponse {
+public class PersonResponseDTO {
 
     private Long id;
     private String name;

@@ -1,7 +1,8 @@
 package com.example.pessoa.api.service.impl;
 
-import com.example.pessoa.api.dto.request.PersonRequest;
-import com.example.pessoa.api.dto.response.PersonResponse;
+import com.example.pessoa.api.dto.request.PersonRequestDTO;
+import com.example.pessoa.api.dto.request.PersonUpdateRequestDTO;
+import com.example.pessoa.api.dto.response.PersonResponseDTO;
 import com.example.pessoa.api.entity.Address;
 import com.example.pessoa.api.entity.Person;
 import com.example.pessoa.api.exception.AddressNotFoundException;
@@ -29,47 +30,47 @@ public class PersonServiceImpl implements PersonService {
 	private final ModelMapper modelMapper;
 
 	@Override
-	public List<PersonResponse> findAll() {
+	public List<PersonResponseDTO> findAll() {
 		return repository.findAll()
 			.stream()
 			.map(person -> {
-				PersonResponse response = modelMapper.map(person, PersonResponse.class);
+				PersonResponseDTO response = modelMapper.map(person, PersonResponseDTO.class);
 				response.setIdAddress(person.getAddress().getId());
 				return response;
 			}).collect(Collectors.toList());
 	}
 
 	@Override
-	public PersonResponse findById(Long id) {
+	public PersonResponseDTO findById(Long id) {
 		Person entityPerson = repository.
 			findById(id).
 			orElseThrow(
 				() -> new PersonNotFoundException(id));
-		return modelMapper.map(entityPerson, PersonResponse.class);
+		return modelMapper.map(entityPerson, PersonResponseDTO.class);
 	}
 
 	@Override
-	public PersonResponse insert(PersonRequest obj) {
+	public PersonResponseDTO insert(PersonRequestDTO obj) {
 		Person entityPerson = modelMapper.map(obj, Person.class);
 
 		if (repository.existsByEmail(entityPerson.getEmail())) {
 			throw new EmailRegisteredExeption();
 		}
 		repository.save(entityPerson);
-		return modelMapper.map(entityPerson, PersonResponse.class);
+		return modelMapper.map(entityPerson, PersonResponseDTO.class);
 	}
 
 	@Override
 	@Transactional
-	public PersonResponse update(Long id, PersonRequest dto){
+	public PersonResponseDTO update(Long id, PersonUpdateRequestDTO dto){
 		Person entity = repository.findById(id).orElseThrow(
 				() -> new PersonNotFoundException(id));
-		Person dtoToEntity = modelMapper.map(dto, Person.class);
+		Person DTO = modelMapper.map(dto, Person.class);
 		// metodo "updateData" é um builder que define a lógica de persistência no Banco
-		checkEmailAtTheBank(entity, dtoToEntity);
-		updateData(entity, modelMapper.map(dtoToEntity, PersonRequest.class));
+		checkEmailAtTheBank(entity, DTO);
+		updateData(entity, modelMapper.map(DTO, PersonUpdateRequestDTO.class));
 		repository.save(entity);
-		return modelMapper.map(entity, PersonResponse.class);
+		return modelMapper.map(entity, PersonResponseDTO.class);
 	}
 
 	@Override
@@ -79,25 +80,25 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	// inserir nesse metodo, apenas os campos que poderão ser atualizados
-	private void updateData(Person entity, PersonRequest obj) {
-		if (!(entity.getName().equals(obj.getName()))) {
-			entity.setName(obj.getName());
+	private void updateData(Person entity, PersonUpdateRequestDTO dto) {
+		if (!(entity.getName().equals(dto.getName())) && dto.getName() != null) {
+			entity.setName(dto.getName());
 		}
-		if (!(entity.getAge().equals(obj.getAge()))) {
-			entity.setAge(obj.getAge());
+		if (!(entity.getAge().equals(dto.getAge())) && dto.getAge() != null) {
+			entity.setAge(dto.getAge());
 		}
-		if (!(entity.getEmail().equals(obj.getEmail()))){
-			entity.setEmail(obj.getEmail());
+		if (!(entity.getEmail().equals(dto.getEmail())) && dto.getEmail() != null){
+			entity.setEmail(dto.getEmail());
 		}
-		if (!(entity.getAddress().getId().equals(obj.getIdAddress()))) {
-			entity.setAddress(addressRepository.findById
-				(obj.getIdAddress()).orElseThrow(
-				() -> new AddressNotFoundException(obj.getIdAddress())));
+		if (!(entity.getAddress().getId().equals(dto.getIdAddress())) && dto.getIdAddress() != null) {
+			entity.setAddress(addressRepository.findById(dto.getIdAddress())
+					.orElseThrow( () -> new AddressNotFoundException(dto.getIdAddress()) ));
 		}
 	}
 
+	@Override
 	@Transactional
-	public Person updatePersonAddress(Long personId, Long AddressId){
+	public PersonResponseDTO updatePersonAddress(Long personId, Long AddressId){
 		Person person = repository.findById(personId).orElseThrow(
 				() -> new PersonNotFoundException(personId));
 		Address address = addressRepository.findById(AddressId).orElseThrow(
@@ -111,7 +112,7 @@ public class PersonServiceImpl implements PersonService {
 
 		person.setAddress(address);
 		repository.save(person);
-		return person;
+		return modelMapper.map(person, PersonResponseDTO.class);
 	}
 
 	private void checkEmailAtTheBank(Person registeredPerson, Person insertPerson){

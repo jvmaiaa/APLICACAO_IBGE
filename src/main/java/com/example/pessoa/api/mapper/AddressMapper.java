@@ -1,12 +1,12 @@
 package com.example.pessoa.api.mapper;
 
-import com.example.pessoa.api.dto.request.AddressRequest;
-import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.request.AddressRequestDTO;
+import com.example.pessoa.api.dto.response.AddressResponseDTO;
 import com.example.pessoa.api.entity.Address;
 
 public class AddressMapper {
 
-    public static Address toAddressEntity(AddressRequest request){
+    public static Address toAddressEntity(AddressRequestDTO request){
 
         Address address = new Address();
         address.setStreetName(request.getStreetName());
@@ -17,8 +17,8 @@ public class AddressMapper {
         return address;
     }
 
-    public static AddressResponse toAddressResponse(Address address){
-        AddressResponse response = new AddressResponse();
+    public static AddressResponseDTO toAddressResponse(Address address){
+        AddressResponseDTO response = new AddressResponseDTO();
         response.setId(address.getId());
         response.setStreetName(address.getStreetName());
         response.setHouseNumber(address.getHouseNumber());
@@ -28,7 +28,7 @@ public class AddressMapper {
         return response;
     }
 
-    public static void updateAddress(Address entity, AddressRequest request) {
+    public static void updateAddress(Address entity, AddressRequestDTO request) {
         entity.setStreetName(request.getStreetName() != null ? request.getStreetName() : entity.getStreetName());
         entity.setHouseNumber(request.getHouseNumber() != null ? request.getHouseNumber() : entity.getHouseNumber());
         entity.setDistrict(request.getDistrict() != null ? request.getDistrict() : entity.getDistrict());

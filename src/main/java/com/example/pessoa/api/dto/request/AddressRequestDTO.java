@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 @NoArgsConstructor
-public class AddressRequest {
+public class AddressRequestDTO {
 
     @NotBlank(message = "The street name field cannot be blank")
     @Length(max = 100, message = "You have exceeded the 100 character length")

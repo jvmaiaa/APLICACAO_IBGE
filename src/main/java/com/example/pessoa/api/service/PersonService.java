@@ -1,19 +1,22 @@
 package com.example.pessoa.api.service;
 
-import com.example.pessoa.api.dto.request.PersonRequest;
-import com.example.pessoa.api.dto.response.PersonResponse;
+import com.example.pessoa.api.dto.request.PersonRequestDTO;
+import com.example.pessoa.api.dto.request.PersonUpdateRequestDTO;
+import com.example.pessoa.api.dto.response.PersonResponseDTO;
 
 import java.util.List;
 
 public interface PersonService {
 
-    List<PersonResponse> findAll();
+    List<PersonResponseDTO> findAll();
 
-    PersonResponse findById(Long id);
+    PersonResponseDTO findById(Long id);
 
-    PersonResponse insert(PersonRequest obj);
+    PersonResponseDTO insert(PersonRequestDTO obj);
 
-    PersonResponse update(Long id, PersonRequest dto);
+    PersonResponseDTO update(Long id, PersonUpdateRequestDTO dto);
+
+    PersonResponseDTO updatePersonAddress(Long personId, Long AddressId);
 
     void delete(Long id);
 }

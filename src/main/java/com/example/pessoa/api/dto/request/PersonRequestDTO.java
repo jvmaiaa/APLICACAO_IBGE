@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 @NoArgsConstructor
-public class PersonRequest {
+public class PersonRequestDTO {
 
     @NotBlank(message = "The name field cannot be blank")
     @Length(max = 100, message = "You have exceeded the 100 character length")

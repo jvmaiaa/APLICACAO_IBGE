@@ -1,7 +1,7 @@
 package com.example.pessoa.api.controller;
 
-import com.example.pessoa.api.dto.request.AddressRequest;
-import com.example.pessoa.api.dto.response.AddressResponse;
+import com.example.pessoa.api.dto.request.AddressRequestDTO;
+import com.example.pessoa.api.dto.response.AddressResponseDTO;
 import com.example.pessoa.api.service.impl.AddressServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,28 +20,28 @@ public class AddressResource {
 
     @GetMapping
     @ResponseStatus(OK)
-    public List<AddressResponse> getAllAddres(){
+    public List<AddressResponseDTO> getAllAddres(){
         return addressService.findAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(OK)
-    public AddressResponse findById(@PathVariable Long id){
+    public AddressResponseDTO findById(@PathVariable Long id){
         // Usamos o tipo OPTIONAL quando temos algum objeto que pode NÃO VIR
         return addressService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public AddressResponse insertAddress(@RequestBody @Valid AddressRequest obj) {
+    public AddressResponseDTO insertAddress(@RequestBody @Valid AddressRequestDTO obj) {
         return addressService.insert(obj);
     }
 
 
     @PutMapping("/{id}")
     @ResponseStatus(OK)
-    public AddressResponse updateAddress(@PathVariable Long id,
-                                         @RequestBody AddressRequest dto) {
+    public AddressResponseDTO updateAddress(@PathVariable Long id,
+                                            @RequestBody AddressRequestDTO dto) {
        return addressService.update(id, dto);
     }
 
