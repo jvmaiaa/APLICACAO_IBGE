@@ -9,6 +9,7 @@ import com.example.pessoa.api.repository.GroupUserRepository;
 import com.example.pessoa.api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +23,12 @@ public class UserServiceImpl {
    private final UserRepository userRepository;
    private final GroupRepository groupRepository;
    private final GroupUserRepository groupUserRepository;
+   private final PasswordEncoder passwordEncoder;
 
    @Transactional
    public User salvar(User user, List<String> groups){
+       String encryptedPassword = passwordEncoder.encode(user.getSenha());
+       user.setSenha(encryptedPassword);
        userRepository.save(user);
 
        List<GroupUser> listGroupUser = groups.stream().map(groupName -> {

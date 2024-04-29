@@ -6,6 +6,7 @@ import com.example.pessoa.api.entity.User;
 import com.example.pessoa.api.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class UserResouce {
     private final UserServiceImpl userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> salvar(@RequestBody UserRegistrationRequestDTO body){
         User savedUser = userService.salvar(body.getUser(), body.getPermissions());
         return ResponseEntity.ok(savedUser);
