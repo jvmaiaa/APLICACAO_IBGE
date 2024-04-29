@@ -6,21 +6,26 @@ import com.example.pessoa.api.dto.response.PersonResponseDTO;
 import com.example.pessoa.api.service.impl.PersonServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
-@Validated
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonResource {
 
 	private final PersonServiceImpl service;
-	
+
+	@GetMapping("/private")
+	public ResponseEntity<String> privateRoute(Authentication authentication){
+		return ResponseEntity.ok("Private route ok! Usuário conectado: " + authentication.getName());
+	}
+
 	@GetMapping
 	@ResponseStatus(OK)
 	public List<PersonResponseDTO> findAll() {

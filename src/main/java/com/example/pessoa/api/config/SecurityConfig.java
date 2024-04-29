@@ -17,16 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // classe q substitui configuração padrão do Spring Security
+    // classe q substitui configuração padrão do Spring Security (cadeia de filtros)
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http, SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider) throws Exception {
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/api/address").permitAll();
                     customizer.anyRequest().authenticated(); // anyRequest precisa estar por ultimo
                 })
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults()) // forma de se autenticar
+                .formLogin(Customizer.withDefaults()) // forma de se autenticar
+                .authenticationProvider(senhaMasterAuthenticationProvider) // forma de validar/autenticar o usuário
                 .build();
     }
 
