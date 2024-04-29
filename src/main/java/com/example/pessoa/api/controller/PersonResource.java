@@ -4,18 +4,21 @@ import com.example.pessoa.api.dto.request.PersonRequestDTO;
 import com.example.pessoa.api.dto.request.PersonUpdateRequestDTO;
 import com.example.pessoa.api.dto.response.PersonResponseDTO;
 import com.example.pessoa.api.service.impl.PersonServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
 @Validated
 @RestController
-@RequestMapping(value = "/api/person")
+@RequestMapping(value = "/person")
 @RequiredArgsConstructor
 public class PersonResource {
 
@@ -35,8 +38,15 @@ public class PersonResource {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public PersonResponseDTO insert(@RequestBody @Valid PersonRequestDTO obj) {
-		return service.insert(obj);
+	public PersonResponseDTO insert(@RequestBody @Valid PersonRequestDTO obj,
+									HttpServletResponse response) {
+		PersonResponseDTO responseDTO = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+				.path("/{id}")
+				.buildAndExpand(responseDTO.getId())
+				.toUri();
+		response.setHeader("Location", uri.toString());
+		return responseDTO;
 		// Retorna "200 OK"
 		// return ResponseEntity.ok().body(obj);
 	}

@@ -3,17 +3,20 @@ package com.example.pessoa.api.controller;
 import com.example.pessoa.api.dto.request.AddressRequestDTO;
 import com.example.pessoa.api.dto.response.AddressResponseDTO;
 import com.example.pessoa.api.service.impl.AddressServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/address")
+@RequestMapping(value = "/address")
 public class AddressResource {
 
     private final AddressServiceImpl addressService;
@@ -31,11 +34,18 @@ public class AddressResource {
         return addressService.findById(id);
     }
 
-    @PostMapping
-    @ResponseStatus(CREATED)
-    public AddressResponseDTO insertAddress(@RequestBody @Valid AddressRequestDTO obj) {
-        return addressService.insert(obj);
-    }
+        @PostMapping
+        @ResponseStatus(CREATED)
+        public AddressResponseDTO insertAddress(@RequestBody @Valid AddressRequestDTO obj,
+                                                HttpServletResponse response) {
+            AddressResponseDTO responseDTO = addressService.insert(obj);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                    .path("/{id}")
+                    .buildAndExpand(responseDTO.getId())
+                    .toUri();
+            response.setHeader("Location", uri.toString());
+            return responseDTO;
+        }
 
 
     @PutMapping("/{id}")
