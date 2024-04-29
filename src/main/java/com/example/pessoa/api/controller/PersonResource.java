@@ -26,6 +26,11 @@ public class PersonResource {
 		return ResponseEntity.ok("Private route ok! Usuário conectado: " + authentication.getName());
 	}
 
+	@GetMapping("/admin")
+	public ResponseEntity<String> adminRoute(){
+		return ResponseEntity.ok("Admin route ok! ");
+	}
+
 	@GetMapping
 	@ResponseStatus(OK)
 	public List<PersonResponseDTO> findAll() {
