@@ -3,6 +3,7 @@ package com.example.pessoa.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true) // deixa as permissões serem configuradas em cada controller
 public class SecurityConfig {
 
     // classe q substitui configuração padrão do Spring Security (cadeia de filtros)
@@ -28,7 +30,6 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/api/address").permitAll();
-                    customizer.requestMatchers("/admin").hasRole("ADMIN");
                     customizer.anyRequest().authenticated(); // anyRequest precisa estar por ultimo
                 })
                 .httpBasic(Customizer.withDefaults()) // forma de se autenticar
@@ -63,6 +64,6 @@ public class SecurityConfig {
 
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults(){
-        return new GrantedAuthorityDefaults("");
+        return new GrantedAuthorityDefaults(""); // remove o prefixo ROLE_ das permissões de usuário
     }
 }
