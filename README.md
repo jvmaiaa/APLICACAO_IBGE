@@ -15,12 +15,12 @@ A aplicação consiste em um sistema de cadastro de **Endereços** e **Famílias
 ## Fluxograma de funcionamento
 ![diagrama](<Caso de Uso Sistema IBGE.png>)
 
+**OBS: Esse fluxograma demonstra apenas a ORDEM correta que você deve executar o mesmo, pois caso comece cadastrando uma pessoa, terá um problema, já que precisa relacionar um endereço com uma pessoa, então o fluxograma é utilizado para mostrar a ordem correta de cadastro das entidades, seguindo a regra de negócio da aplicação.**
 ## Endpoints disponíveis (URIs)
 Para vizualizar todos os endpoints disponíveis da aplicação com mais detalhes, acesse:
 - Vale ressaltar que você precisa **executar a aplicação antes.**
 - `http://localhost:8080/swagger-ui/index.html`
 Implementação de decumentação feita com `Swagger`.
-  **OBS: Esse fluxograma demonstra apenas a ORDEM correta que você deve executar o mesmo, pois caso comece cadastrando uma pessoa, terá um problema, já que precisa relacionar um endereço com uma pessoa, então o fluxograma é utilizado para mostrar a ordem correta de cadastro das entidades, seguindo a regra de negócio da aplicação.**
 
 ![alt text](Swagger.png)
 # Tecnologias utilizadas
