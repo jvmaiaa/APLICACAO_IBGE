@@ -20,6 +20,7 @@ Para vizualizar todos os endpoints disponíveis da aplicação com mais detalhes
 - Vale ressaltar que você precisa **executar a aplicação antes.**
 - `http://localhost:8080/swagger-ui/index.html`
 Implementação de decumentação feita com `Swagger`.
+  **OBS: Esse fluxograma demonstra apenas a ORDEM correta que você deve executar o mesmo, pois caso comece cadastrando uma pessoa, terá um problema, já que precisa relacionar um endereço com uma pessoa, então o fluxograma é utilizado para mostrar a ordem correta de cadastro das entidades, seguindo a regra de negócio da aplicação.**
 
 ![alt text](Swagger.png)
 # Tecnologias utilizadas
