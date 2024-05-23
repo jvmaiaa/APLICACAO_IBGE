@@ -48,7 +48,7 @@ public class DocumentsController {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:ss:mm");
         String currentDateTime = dateFormat.format(new Date());
 
-        String headerKey = "Context-Disposition";
+        String headerKey = "Content-Disposition";
         String headerValue = "atachment; filename=csv_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
