@@ -32,7 +32,7 @@ public class DocumentsController {
     public void exportToPdf(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
         String headerKey = "Content-Disposition";
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:ss:mm");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
         String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
 
@@ -45,7 +45,7 @@ public class DocumentsController {
     @GetMapping("/csv/export")
     public void exportToCsv(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:ss:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
         String currentDateTime = dateFormat.format(new Date());
 
         String headerKey = "Content-Disposition";
