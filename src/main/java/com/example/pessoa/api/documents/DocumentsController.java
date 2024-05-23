@@ -1,6 +1,8 @@
 package com.example.pessoa.api.documents;
 
 import com.example.pessoa.api.dto.response.PersonResponseDTO;
+import com.example.pessoa.api.entity.Person;
+import com.example.pessoa.api.service.PersonService;
 import com.example.pessoa.api.service.impl.PersonServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,6 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,9 +24,9 @@ import java.util.List;
 @RequestMapping("/documents")
 public class DocumentsController {
 
+    private final PersonService personService;
     private final PdfService pdfService;
-    private final PersonServiceImpl personService;
-//    private final CsvService csvService;
+    private final CsvService csvService;
 
     @GetMapping("/pdf/export")
     public void exportToPdf(HttpServletResponse response) throws IOException {
@@ -36,10 +37,9 @@ public class DocumentsController {
         String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
 
         response.setHeader(headerKey, headerValue);
+        List<PersonResponseDTO> personResponseDTOS = personService.findAll();
 
-        List<PersonResponseDTO> listUsers = personService.findAll();
-
-        pdfService.export(response, listUsers);
+        pdfService.export(response, personResponseDTOS);
     }
 
     @GetMapping("/csv/export")
@@ -52,19 +52,7 @@ public class DocumentsController {
         String headerValue = "atachment; filename=csv_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<PersonResponseDTO> listaDePessoas = personService.findAll();
-
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Id", "Name", "Age", "E-mail", "Id Address"};
-        String[] nameMapping = {"id", "name", "age", "email", "idAddress"};
-
-        csvWriter.writeHeader(csvHeader);
-
-        for (PersonResponseDTO person : listaDePessoas) {
-            csvWriter.write(person, nameMapping);
-        }
-
-        csvWriter.close();
+        csvService.export(response);
     }
 
 }
