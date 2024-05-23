@@ -11,6 +11,7 @@ import com.example.pessoa.api.exception.PersonNotFoundException;
 import com.example.pessoa.api.repository.AddressRepository;
 import com.example.pessoa.api.repository.PessoaRepository;
 import com.example.pessoa.api.service.PersonService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-	private final PessoaRepository repository;
+	private final PessoaRepository personRepository;
 
 	private  final AddressRepository addressRepository;
 
@@ -31,7 +32,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public List<PersonResponseDTO> findAll() {
-		return repository.findAll()
+		return personRepository.findAll()
 			.stream()
 			.map(person -> {
 				PersonResponseDTO response = modelMapper.map(person, PersonResponseDTO.class);
@@ -42,7 +43,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PersonResponseDTO findById(Long id) {
-		Person entityPerson = repository.
+		Person entityPerson = personRepository.
 			findById(id).
 			orElseThrow(
 				() -> new PersonNotFoundException(id));
@@ -53,29 +54,29 @@ public class PersonServiceImpl implements PersonService {
 	public PersonResponseDTO insert(PersonRequestDTO obj) {
 		Person entityPerson = modelMapper.map(obj, Person.class);
 
-		if (repository.existsByEmail(entityPerson.getEmail())) {
+		if (personRepository.existsByEmail(entityPerson.getEmail())) {
 			throw new EmailRegisteredExeption();
 		}
-		repository.save(entityPerson);
+		personRepository.save(entityPerson);
 		return modelMapper.map(entityPerson, PersonResponseDTO.class);
 	}
 
 	@Override
 	@Transactional
 	public PersonResponseDTO update(Long id, PersonUpdateRequestDTO dto){
-		Person entity = repository.findById(id).orElseThrow(
+		Person entity = personRepository.findById(id).orElseThrow(
 				() -> new PersonNotFoundException(id));
 		Person DTO = modelMapper.map(dto, Person.class);
 		// metodo "updateData" é um builder que define a lógica de persistência no Banco
 		checkEmailAtTheBank(entity, DTO);
 		updateData(entity, modelMapper.map(DTO, PersonUpdateRequestDTO.class));
-		repository.save(entity);
+		personRepository.save(entity);
 		return modelMapper.map(entity, PersonResponseDTO.class);
 	}
 
 	@Override
 	public void delete(Long id) {
-		repository.delete(repository.findById(id)
+		personRepository.delete(personRepository.findById(id)
 				.orElseThrow( () -> new PersonNotFoundException(id) ));
 	}
 
@@ -99,7 +100,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	@Transactional
 	public PersonResponseDTO updatePersonAddress(Long personId, Long AddressId){
-		Person person = repository.findById(personId).orElseThrow(
+		Person person = personRepository.findById(personId).orElseThrow(
 				() -> new PersonNotFoundException(personId));
 		Address address = addressRepository.findById(AddressId).orElseThrow(
 				() -> new PersonNotFoundException(personId));
@@ -111,16 +112,20 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		person.setAddress(address);
-		repository.save(person);
+		personRepository.save(person);
 		return modelMapper.map(person, PersonResponseDTO.class);
 	}
 
 	private void checkEmailAtTheBank(Person registeredPerson, Person insertPerson){
 		if (!(registeredPerson.getEmail().equals(insertPerson.getEmail()))) {
-			if (repository.existsByEmailAndIdNot(insertPerson.getEmail(), registeredPerson.getId())) {
+			if (personRepository.existsByEmailAndIdNot(insertPerson.getEmail(), registeredPerson.getId())) {
 				throw new EmailRegisteredExeption();
 			}
 		}
 	}
 
+	public void exportToPdf(HttpServletResponse response) {
+		List<Person> pessoas = personRepository.findAll();
+		List<PersonResponseDTO> data = pessoas.stream().map(person -> modelMapper.map(person, PersonResponseDTO.class)).collect(Collectors.toList());
+	}
 }
