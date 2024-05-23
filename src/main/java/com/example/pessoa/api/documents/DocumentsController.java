@@ -1,23 +1,16 @@
 package com.example.pessoa.api.documents;
 
-import com.example.pessoa.api.dto.response.PersonResponseDTO;
-import com.example.pessoa.api.entity.Person;
 import com.example.pessoa.api.service.PersonService;
-import com.example.pessoa.api.service.impl.PersonServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,9 +30,8 @@ public class DocumentsController {
         String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
 
         response.setHeader(headerKey, headerValue);
-        List<PersonResponseDTO> personResponseDTOS = personService.findAll();
 
-        pdfService.export(response, personResponseDTOS);
+        pdfService.export(response);
     }
 
     @GetMapping("/csv/export")

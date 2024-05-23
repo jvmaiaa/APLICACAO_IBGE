@@ -8,7 +8,6 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,14 +15,12 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-
 @Data
-@AllArgsConstructor
 @RequiredArgsConstructor
 @Component
 public class PdfService {
 
-    private PersonService personService;
+    private final PersonService personService;
 
     public void writeTableHeader(PdfPTable table){
         PdfPCell cell = new PdfPCell();
@@ -49,7 +46,8 @@ public class PdfService {
         table.addCell(cell);
     }
 
-    public void writeTableData(PdfPTable table, List<PersonResponseDTO> personsDto){
+    public void writeTableData(PdfPTable table){
+        List<PersonResponseDTO> personsDto = personService.findAll();
         for (PersonResponseDTO user : personsDto){
             table.addCell(String.valueOf(user.getId()));
             table.addCell(user.getName());
@@ -59,8 +57,7 @@ public class PdfService {
         }
     }
 
-    public void export(HttpServletResponse response, List<PersonResponseDTO> personsDto) throws IOException {
-        //List<Person> pessoas = pessoaRepository.findAll();
+    public void export(HttpServletResponse response) throws IOException {
         Document document = new Document(PageSize.A4);
 
         PdfWriter.getInstance(document, response.getOutputStream());
@@ -81,7 +78,7 @@ public class PdfService {
         table.setWidths(new float[] {1.5f, 2.5f, 2.5f, 2.5f, 1.5f});
 
         writeTableHeader(table);
-        writeTableData(table, personsDto);
+        writeTableData(table);
 
         document.add(table);
 
