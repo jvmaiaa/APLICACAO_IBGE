@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +25,7 @@ public class DocumentsController {
 
     private final PdfService pdfService;
     private final PersonServiceImpl personService;
+//    private final CsvService csvService;
 
     @GetMapping("/pdf/export")
     public void exportToPdf(HttpServletResponse response) throws IOException {
@@ -38,27 +43,28 @@ public class DocumentsController {
     }
 
     @GetMapping("/csv/export")
-    public void exportToCsv(HttpServletResponse response){
-        response.setContentType("application/csv");
-        String headerKey = "Context-Disposition";
+    public void exportToCsv(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:hh:ss:mm");
         String currentDateTime = dateFormat.format(new Date());
-        String headerValue = "atachment; filename=pdf_" + currentDateTime + ".pdf";
 
+        String headerKey = "Context-Disposition";
+        String headerValue = "atachment; filename=csv_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<PersonResponseDTO> listUsers = personService.findAll();
-        // TODO: Aplicar o método do CSV
+        List<PersonResponseDTO> listaDePessoas = personService.findAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"Id", "Name", "Age", "E-mail", "Id Address"};
+        String[] nameMapping = {"id", "name", "age", "email", "idAddress"};
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (PersonResponseDTO person : listaDePessoas) {
+            csvWriter.write(person, nameMapping);
+        }
+
+        csvWriter.close();
     }
 
-//    @GetMapping("/pdf/all")
-//    public void exportToPdf(HttpServletResponse response) throws IOException {
-//        this.pdfService.exportToPdf(response);
-//    }
-
-
-//    @GetMapping("/excel/all")
-//    public void exportToExcel(HttpServletResponse response) throws IOException {
-//        this.pdfService.exportToExcel(response);
-//    }
 }
