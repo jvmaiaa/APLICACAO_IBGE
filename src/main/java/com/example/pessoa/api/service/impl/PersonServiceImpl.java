@@ -123,9 +123,4 @@ public class PersonServiceImpl implements PersonService {
 			}
 		}
 	}
-
-	public void exportToPdf(HttpServletResponse response) {
-		List<Person> pessoas = personRepository.findAll();
-		List<PersonResponseDTO> data = pessoas.stream().map(person -> modelMapper.map(person, PersonResponseDTO.class)).collect(Collectors.toList());
-	}
 }
