@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.stereotype.Component;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -23,7 +24,7 @@ public class CsvService {
 
     public void export(HttpServletResponse response) throws IOException {
 
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), new CsvPreference.Builder('"', ';', "\n").build());
         String[] csvHeader = {"Id", "Name", "Age", "E-mail", "Id Address"};
         String[] nameMapping = {"id", "name", "age", "email", "idAddress"};
 
